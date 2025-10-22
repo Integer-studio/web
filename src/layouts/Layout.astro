@@ -15,7 +15,21 @@ import '../styles/global.css'
 		<title>Integer</title>
 	</head>
 	<body>
-		<slot />
+		<header class="border-b border-primary-500 w-full">
+			<nav class="mx-4 md:mx-12 border-x border-primary-500 px-4 py-1 h-12 flex items-center justify-between">
+				<a class="h-full" href="/"><img src="/logo/full.svg" alt="Integer logo" class="h-full"></a>
+				<nav>
+					<menu class="flex gap-10 ">
+						<li><a href="/projects">Projekty</a></li>
+						<li><a href="#contact">Kontakt</a></li>
+						<li><a href="/about">O Integeru</a></li>
+					</menu>
+				</nav>
+			</nav>
+		</header>
+		<main class="mx-4 md:mx-12 border-x border-primary-500">
+			<slot />
+		</main>
 	</body>
 </html>
 
