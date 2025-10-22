@@ -31,4 +31,5 @@
   --color-tertiary-700: rgb(71 83 71);
   --color-tertiary-800: rgb(53 62 53);
   --color-tertiary-900: rgb(35 41 35);
+  --font-sans: "Host Grotesk", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }

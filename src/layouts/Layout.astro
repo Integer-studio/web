@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import Navbar from  '../components/Navbar.astro'
 ---
 
 <!doctype html>
@@ -11,22 +12,16 @@ import '../styles/global.css'
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 		<link rel="manifest" href="/site.webmanifest">
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
 		<meta name="generator" content={Astro.generator} />
 		<title>Integer</title>
 	</head>
 	<body>
-		<header class="border-b border-primary-500 w-full">
-			<nav class="mx-4 md:mx-12 border-x border-primary-500 px-4 py-1 h-12 flex items-center justify-between">
-				<a class="h-full" href="/"><img src="/logo/full.svg" alt="Integer logo" class="h-full"></a>
-				<nav>
-					<menu class="flex gap-10 ">
-						<li><a href="/projects">Projekty</a></li>
-						<li><a href="#contact">Kontakt</a></li>
-						<li><a href="/about">O Integeru</a></li>
-					</menu>
-				</nav>
-			</nav>
-		</header>
+		<Navbar/>
 		<main class="mx-4 md:mx-12 border-x border-primary-500">
 			<slot />
 		</main>
