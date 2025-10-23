@@ -1,5 +1,13 @@
 ---
-const {href, name} = Astro.props;
+const { href, name } = Astro.props;
+import { ArrowRight } from '@lucide/astro';
 ---
 
-<li><a href={href}>{name}</a></li>
+<li>
+  <a href={href} class="group relative inline-block">
+    {name}
+    <ArrowRight
+      class="absolute top-1/2 -translate-x-2 right-0 -translate-y-1/2 hidden group-hover:block z-0 pointer-events-none"
+    />
+  </a>
+</li>
