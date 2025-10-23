@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar.astro';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="cs">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -25,17 +25,21 @@ import Navbar from '../components/Navbar.astro';
   </head>
   <body>
     <Navbar />
-    <main class="mx-4 md:mx-12 border-x border-primary-500">
+    <main class="mx-4 md:mx-12 border-x border-primary-500 grid-cols-12 grid">
       <slot />
     </main>
   </body>
 </html>
 
-<style>
+<style is:global>
   html,
   body {
     margin: 0;
     width: 100%;
     height: 100%;
+    color: var(--color-tertiary-900);
+  }
+  * {
+    border-color: var(--color-primary-500);
   }
 </style>
