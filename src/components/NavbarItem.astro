@@ -1,13 +1,33 @@
 ---
 const { href, name } = Astro.props;
-import { ArrowRight } from '@lucide/astro';
 ---
 
-<li>
-  <a href={href} class="group relative inline-block">
-    {name}
-    <ArrowRight
-      class="absolute top-1/2 -translate-x-2 right-0 -translate-y-1/2 hidden group-hover:block z-0 pointer-events-none"
-    />
-  </a>
+<li class="group">
+  <a
+    href={href}
+    class="navbar-link group-hover:text-primary-800 group-hover:font-semibold text-lg"
+    >{name}</a
+  >
 </li>
+
+<style>
+  .navbar-link {
+    transition: color 0.1s;
+  }
+
+  .navbar-link::after {
+    content: '→';
+    display: inline-block;
+    margin-left: 0.25rem;
+    opacity: 0;
+    transform: translateX(-0.5rem);
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+
+  .group:hover .navbar-link::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
