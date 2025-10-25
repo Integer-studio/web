@@ -25,9 +25,15 @@ import Navbar from '../components/Navbar.astro';
   </head>
   <body>
     <Navbar />
-    <main class="mx-4 md:mx-12 border-x border-primary-500 grid-cols-12 grid">
-      <slot />
-    </main>
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+        <main
+          class="mx-4 md:mx-12 border-x border-primary-500 grid-cols-12 grid pt-12"
+        >
+          <slot />
+        </main>
+      </div>
+    </div>
   </body>
 </html>
 
@@ -43,3 +49,16 @@ import Navbar from '../components/Navbar.astro';
     border-color: var(--color-primary-500);
   }
 </style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { ScrollSmoother } from 'gsap/ScrollSmoother';
+
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+  ScrollSmoother.create({
+    smooth: 0.2,
+    effects: true,
+  });
+</script>
