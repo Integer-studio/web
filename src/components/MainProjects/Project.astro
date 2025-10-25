@@ -1,0 +1,20 @@
+---
+import { Picture } from 'astro:assets';
+const { image, alt, name, description, width, height, tags } = Astro.props;
+---
+
+<div class="col-span-12 md:col-span-6">
+  <div class="aspect-3/2 w-full overflow-hidden">
+    <Picture
+      src={image}
+      formats={['avif', 'webp']}
+      alt={alt}
+      width={width}
+      height={height}
+    />
+  </div>
+  <h3>{name}</h3>
+  <p>
+    {description}
+  </p>
+</div>
