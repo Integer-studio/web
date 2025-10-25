@@ -1,4 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Dina';
+  src: url('/DinaRemasterII-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
 
 @theme {
   --color-primary-50: rgb(249 254 249);
@@ -31,5 +38,10 @@
   --color-tertiary-700: rgb(71 83 71);
   --color-tertiary-800: rgb(53 62 53);
   --color-tertiary-900: rgb(35 41 35);
-  --font-sans: "Host Grotesk", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    'Host Grotesk', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    'Dina', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
 }
