@@ -2,12 +2,8 @@
 const { href, name } = Astro.props;
 ---
 
-<li class="group hover:scale-105">
-  <a
-    href={href}
-    class="navbar-link group-hover:text-primary-800 group-hover:font-semibold text-lg"
-    >{name}</a
-  >
+<li class="group nav-item hover:text-primary-700">
+  <a href={href} class="navbar-link text-lg font-bold font-mono">{name}</a>
 </li>
 
 <style>
@@ -24,6 +20,8 @@ const { href, name } = Astro.props;
     transition:
       opacity 0.2s,
       transform 0.2s;
+    transition-delay: 200ms;
+    font-family: var(--font-sans);
   }
 
   .group:hover .navbar-link::after {
@@ -31,3 +29,41 @@ const { href, name } = Astro.props;
     transform: translateX(0);
   }
 </style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { TextPlugin } from 'gsap/TextPlugin';
+  import { Observer } from 'gsap/Observer';
+
+  gsap.registerPlugin(TextPlugin);
+  gsap.registerPlugin(Observer);
+
+  document.querySelectorAll('.nav-item').forEach((navItem) => {
+    const link = navItem.querySelector('.navbar-link');
+    const name = link.innerHTML;
+
+    Observer.create({
+      target: navItem,
+      type: 'mouse, pointer',
+      onHover: () =>
+        gsap.to(link, {
+          text: {
+            value: name.toUpperCase(),
+            type: 'diff',
+            speed: 2,
+          },
+          ease: 'none',
+        }),
+      onHoverEnd: () =>
+        gsap.to(link, {
+          text: {
+            value: name.toLowerCase(),
+            type: 'diff',
+            rtl: true,
+            speed: 2,
+          },
+          ease: 'none',
+        }),
+    });
+  });
+</script>
