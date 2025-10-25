@@ -1,17 +1,18 @@
 ---
-const { href, name } = Astro.props;
+const { href, name, highlight } = Astro.props;
 ---
 
-<li class="group nav-item hover:text-primary-700">
-  <a href={href} class="navbar-link text-lg font-bold font-mono">{name}</a>
+<li class="nav-item">
+  <a
+    href={href}
+    class={`navbar-link block text-lg font-bold font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150`}
+  >
+    {name}
+  </a>
 </li>
 
 <style>
-  .navbar-link {
-    transition: color 0.1s;
-  }
-
-  .navbar-link::after {
+  /* .navbar-link::after {
     content: '→';
     display: inline-block;
     margin-left: 0.25rem;
@@ -27,7 +28,7 @@ const { href, name } = Astro.props;
   .group:hover .navbar-link::after {
     opacity: 1;
     transform: translateX(0);
-  }
+  } */
 </style>
 
 <script>
@@ -38,12 +39,11 @@ const { href, name } = Astro.props;
   gsap.registerPlugin(TextPlugin);
   gsap.registerPlugin(Observer);
 
-  document.querySelectorAll('.nav-item').forEach((navItem) => {
-    const link = navItem.querySelector('.navbar-link');
+  document.querySelectorAll('.navbar-link').forEach((link) => {
     const name = link.innerHTML;
 
     Observer.create({
-      target: navItem,
+      target: link,
       type: 'mouse, pointer',
       onHover: () =>
         gsap.to(link, {
