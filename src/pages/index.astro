@@ -1,98 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Button from '../components/Button.astro';
-import { CircleDollarSign, Clock, Sparkle } from '@lucide/astro';
+import MainHero from '../components/MainHero.astro';
+import MainProjects from '../components/MainProjects.astro';
+import MainWhy from '../components/MainWhy.astro';
 ---
 
 <Layout>
-  <section class="col-span-12 grid-cols-subgrid grid border-b">
-    <div
-      class="col-span-12 md:col-span-6 px-4 py-16 lg:py-24 lg:px-8 border-b md:border-r md:border-b-0 border-dashed"
-    >
-      <h1 class="font-semibold text-5xl leading-13 text-primary-700">
-        Moderní weby a online řešení pro vaše nápady bez korporátních cen.
-      </h1>
-    </div>
-    <div
-      class="col-span-12 md:col-span-6 px-4 py-16 lg:py-24 lg:px-8 space-y-8"
-    >
-      <p class="text-lg">
-        Jsme tým 4 nadšených studentů, kteří se orientují v nejnovějších
-        webových technologiích. Transformujeme vaše podnikatelské nápady do
-        funkčních, rychlých a škálovatelných aplikací.
-      </p>
-      <Button text="Chci spolupracovat" href="#contact" />
-    </div>
-  </section>
-  <section class="col-span-12 grid grid-cols-subgrid border-b px-8 py-12">
-    <h2
-      class="col-span-12 text-center font-semibold text-3xl text-primary-700 mb-8"
-    >
-      Proč si vybrat nás?
-    </h2>
-    <ul class="col-span-12 grid grid-cols-subgrid gap-12">
-      <li
-        class="col-span-10 md:col-span-4 flex flex-col items-center ext-border p-6"
-      >
-        <CircleDollarSign
-          class="w-12 h-12 text-tertiary-700 mb-4 stroke-[1.5]"
-        />
-        <h3 class="text-xl mb-2 font-medium">Cenová dostupnost</h3>
-        <p class="text-center">
-          Jsme skupina studentů, takže si nežádáme astronomické částky.
-        </p>
-      </li>
-      <li
-        class="col-span-10 md:col-span-4 flex flex-col items-center ext-border p-6"
-      >
-        <Clock class="w-12 h-12 text-tertiary-700 mb-4 stroke-[1.5]" />
-        <h3 class="text-xl mb-2 font-medium">Rychlá responsivita</h3>
-        <p class="text-center">
-          Potřebujete změnu zítra? Jsme malý a flexibilní tým – reagujeme
-          okamžitě.
-        </p>
-      </li>
-      <li
-        class="col-span-10 md:col-span-4 flex flex-col items-center ext-border p-6"
-      >
-        <Sparkle class="w-12 h-12 text-tertiary-700 mb-4 stroke-[1.5]" />
-        <h3 class="text-xl mb-2 font-medium">Moderní technologie</h3>
-        <p class="text-center">
-          Využíváme nejnovější a nejvýkonnější technologie pro vaše řešení.
-        </p>
-      </li>
-    </ul>
-  </section>
+  <MainHero />
+  <MainProjects />
+  <MainWhy />
 </Layout>
-
-<style>
-  .ext-border {
-    position: relative;
-  }
-
-  .ext-border::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -1rem;
-    width: calc(100% + 2rem);
-    height: 100%;
-    border-top: 1px dashed;
-    border-bottom: 1px dashed;
-    box-sizing: border-box;
-    border-color: var(--color-primary-500);
-  }
-
-  .ext-border::after {
-    content: '';
-    position: absolute;
-    top: -1rem;
-    left: 0;
-    width: 100%;
-    height: calc(100% + 2rem);
-    border-left: 1px dashed;
-    border-right: 1px dashed;
-    box-sizing: border-box;
-    border-color: var(--color-primary-500);
-  }
-</style>
