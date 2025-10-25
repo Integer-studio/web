@@ -2,15 +2,15 @@
 import { CircleDollarSign, Clock, Sparkle } from '@lucide/astro';
 ---
 
-<section class="col-span-12 grid grid-cols-subgrid border-b px-8 py-12">
+<section class="col-span-12 grid grid-cols-subgrid border-b p-12">
   <h2
-    class="col-span-12 text-center font-semibold text-3xl text-primary-700 mb-8"
+    class="col-span-12 text-center font-semibold text-3xl text-primary-700 mb-12"
   >
     Proč si vybrat nás?
   </h2>
-  <ul class="col-span-12 grid grid-cols-subgrid gap-12">
+  <ul class="col-span-12 grid grid-cols-subgrid">
     <li
-      class="col-span-10 md:col-span-4 flex flex-col items-center ext-border p-6"
+      class="col-span-12 md:col-span-4 flex flex-col items-center p-6 md:px-10 border-b md:border-b-0 md:border-r border-dashed"
     >
       <CircleDollarSign class="w-12 h-12 text-tertiary-700 mb-4 stroke-[1.5]" />
       <h3 class="text-xl mb-2 font-medium">Cenová dostupnost</h3>
@@ -19,7 +19,7 @@ import { CircleDollarSign, Clock, Sparkle } from '@lucide/astro';
       </p>
     </li>
     <li
-      class="col-span-10 md:col-span-4 flex flex-col items-center ext-border p-6"
+      class="col-span-12 md:col-span-4 flex flex-col items-center p-6 md:px-10 border-b md:border-b-0 md:border-r border-dashed"
     >
       <Clock class="w-12 h-12 text-tertiary-700 mb-4 stroke-[1.5]" />
       <h3 class="text-xl mb-2 font-medium">Rychlá responsivita</h3>
@@ -29,7 +29,7 @@ import { CircleDollarSign, Clock, Sparkle } from '@lucide/astro';
       </p>
     </li>
     <li
-      class="col-span-10 md:col-span-4 flex flex-col items-center ext-border p-6"
+      class="col-span-12 md:col-span-4 flex flex-col items-center p-6 md:px-10"
     >
       <Sparkle class="w-12 h-12 text-tertiary-700 mb-4 stroke-[1.5]" />
       <h3 class="text-xl mb-2 font-medium">Moderní technologie</h3>
@@ -39,35 +39,3 @@ import { CircleDollarSign, Clock, Sparkle } from '@lucide/astro';
     </li>
   </ul>
 </section>
-
-<style>
-  .ext-border {
-    position: relative;
-  }
-
-  .ext-border::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -1rem;
-    width: calc(100% + 2rem);
-    height: 100%;
-    border-top: 1px dashed;
-    border-bottom: 1px dashed;
-    box-sizing: border-box;
-    border-color: var(--color-primary-500);
-  }
-
-  .ext-border::after {
-    content: '';
-    position: absolute;
-    top: -1rem;
-    left: 0;
-    width: 100%;
-    height: calc(100% + 2rem);
-    border-left: 1px dashed;
-    border-right: 1px dashed;
-    box-sizing: border-box;
-    border-color: var(--color-primary-500);
-  }
-</style>
