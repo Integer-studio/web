@@ -14,12 +14,17 @@ const {
 
 <article
   class:list={[
-    'col-span-10 md:col-span-5 border',
+    'col-span-10 md:col-span-5 border flex flex-col justify-between',
     { 'md:col-span-10': isFullW },
   ]}
 >
-  <div class="w-full p-4 mb-4">
-    <header class="flex items-start justify-between mb-4">
+  <div class:list={['w-full p-4 mb-1', { 'mb-4': isFullW }]}>
+    <header
+      class:list={[
+        'flex items-start justify-between mb-0 gap-6',
+        { 'mb-3': isFullW },
+      ]}
+    >
       <h3
         class:list={[
           'font-semibold',
@@ -29,12 +34,17 @@ const {
         {name}
       </h3>
       <div
-        class="font-mono text-lg flex gap-[1ch] flex-wrap-reverse text-tertiary-700"
+        class="font-mono text-lg flex flex-wrap justify-end text-tertiary-700"
       >
         {tags.map((tag) => <p class="tag">{tag}</p>)}
       </div>
     </header>
-    <p class="text-lg w-2/3 text-tertiary-700">
+    <p
+      class:list={[
+        'text-lg text-tertiary-700',
+        { 'w-2/3': isFullW, 'w-full': !isFullW },
+      ]}
+    >
       {description}
     </p>
   </div>
@@ -51,5 +61,6 @@ const {
 <style>
   .tag + .tag:before {
     content: '- ';
+    margin-left: 1ch;
   }
 </style>
