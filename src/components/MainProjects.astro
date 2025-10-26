@@ -2,10 +2,29 @@
 import Project from './MainProjects/Project.astro';
 ---
 
-<section class="col-span-12 grid grid-cols-subgrid border-b px-8 py-12 gap-12">
-  <h2 class="col-span-12 text-center font-semibold text-3xl text-primary-700">
+<section
+  class="col-span-10 col-start-2 grid grid-cols-10 border-b py-12 gap-y-16 gap-x-12"
+>
+  <h2 class="col-span-10 text-center font-semibold text-3xl text-primary-700">
     Výběr naší práce
   </h2>
+  <Project
+    name="Tender portál"
+    image="/images/tender.png"
+    alt="UI design webové stránky pro kadeřnictví."
+    description="UI design webové stránky pro kadeřnictví."
+    width="1760"
+    height="1045"
+    isFullW
+  />
+  <Project
+    name="Kadeřnictví"
+    image="/images/kadernictvi.png"
+    alt="UI design webové stránky pro kadeřnictví."
+    description="UI design webové stránky pro kadeřnictví."
+    width="1280"
+    height="2760"
+  />
   <Project
     name="Kadeřnictví"
     image="/images/kadernictvi.png"
