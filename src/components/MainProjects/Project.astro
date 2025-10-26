@@ -1,27 +1,47 @@
 ---
 import { Picture } from 'astro:assets';
-const { image, alt, name, description, width, height, tags, isFullW } =
-  Astro.props;
+const {
+  image,
+  alt,
+  name,
+  description,
+  width,
+  height,
+  tags = [],
+  isFullW,
+} = Astro.props;
 ---
 
 <div
   class:list={[
-    'col-span-10 md:col-span-5 aspect-3/2 overflow-hidden relative',
+    'col-span-10 md:col-span-5 border',
     { 'md:col-span-10': isFullW },
   ]}
 >
+  <div class="w-full p-4 mb-4">
+    <div class="flex items-baseline justify-between mb-4">
+      <h3
+        class:list={[
+          'font-semibold',
+          { 'text-4xl': isFullW, 'text-2xl': !isFullW },
+        ]}
+      >
+        {name}
+      </h3>
+      <div class="font-mono text-lg flex gap-2 flex-wrap-reverse">
+        {tags.map((tag) => <p>{tag}</p>)}
+      </div>
+    </div>
+    <p class="text-lg w-2/3">
+      {description}
+    </p>
+  </div>
   <Picture
     src={image}
     formats={['avif', 'webp']}
     alt={alt}
     width={width}
     height={height}
-    class="absolute top-0 w-full shadow"
+    class="w-full border-t border-dashed pt-0.5"
   />
-  <div class="absolute bottom-0 w-full bg-tertiary-900/10 backdrop-blur-xs">
-    <h3>{name}</h3>
-    <p>
-      {description}
-    </p>
-  </div>
 </div>
