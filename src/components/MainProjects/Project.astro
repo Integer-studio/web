@@ -12,14 +12,14 @@ const {
 } = Astro.props;
 ---
 
-<div
+<article
   class:list={[
     'col-span-10 md:col-span-5 border',
     { 'md:col-span-10': isFullW },
   ]}
 >
   <div class="w-full p-4 mb-4">
-    <div class="flex items-baseline justify-between mb-4">
+    <header class="flex items-start justify-between mb-4">
       <h3
         class:list={[
           'font-semibold',
@@ -28,11 +28,13 @@ const {
       >
         {name}
       </h3>
-      <div class="font-mono text-lg flex gap-2 flex-wrap-reverse">
-        {tags.map((tag) => <p>{tag}</p>)}
+      <div
+        class="font-mono text-lg flex gap-[1ch] flex-wrap-reverse text-tertiary-700"
+      >
+        {tags.map((tag) => <p class="tag">{tag}</p>)}
       </div>
-    </div>
-    <p class="text-lg w-2/3">
+    </header>
+    <p class="text-lg w-2/3 text-tertiary-700">
       {description}
     </p>
   </div>
@@ -44,4 +46,10 @@ const {
     height={height}
     class="w-full border-t border-dashed pt-0.5"
   />
-</div>
+</article>
+
+<style>
+  .tag + .tag:before {
+    content: '- ';
+  }
+</style>
