@@ -1,0 +1,14 @@
+---
+import ServiceCard from './ServiceCard.astro';
+import { CodeXml, AppWindowMac } from '@lucide/astro';
+---
+
+<section class="col-span-10 col-start-2 grid grid-cols-10 py-12 gap-8">
+  <h2 class="col-span-10 text-center font-semibold text-3xl text-primary-700">
+    Co vám nabídneme
+  </h2>
+  <ServiceCard title="Aplikace od nuly" icon="code">
+    <CodeXml slot="icon" class="w-12 h-12 text-secondary-700" />
+  </ServiceCard>
+</section>
+<div class="col-span-12 border-t" aria-hidden="true"></div>
