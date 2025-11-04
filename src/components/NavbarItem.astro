@@ -5,7 +5,7 @@ const { href, name, highlight } = Astro.props;
 <li class="nav-item">
   <a
     href={href}
-    class={`navbar-link block text-lg font-bold font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150`}
+    class={`navbar-link block text-[16x] font-medium hover:italic font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150`}
   >
     {name}
   </a>
@@ -31,7 +31,7 @@ const { href, name, highlight } = Astro.props;
   } */
 </style>
 
-<script>
+<!-- <script>
   import { gsap } from 'gsap';
   import { TextPlugin } from 'gsap/TextPlugin';
   import { Observer } from 'gsap/Observer';
@@ -66,4 +66,4 @@ const { href, name, highlight } = Astro.props;
         }),
     });
   });
-</script>
+</script> -->

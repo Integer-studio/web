@@ -1,15 +1,19 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: 'Dina';
-  src: url('/DinaRemasterII-Bold.woff2') format('woff2');
-  font-weight: 700;
+  font-family: 'Google Sans Code';
+  font-display: swap;
+  src: url('/GoogleSansCode-Medium.ttf') format('truetype');
+  font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Handjet';
-  src: url();
+  font-family: 'Google Sans Code';
+  font-display: swap;
+  src: url('/GoogleSansCode-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
 }
 
 @theme {
@@ -47,6 +51,6 @@
     'Host Grotesk', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono:
-    'Dina', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-    'Liberation Mono', monospace;
+    'Google Sans Code', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
 }
