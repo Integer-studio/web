@@ -54,3 +54,7 @@
     'Google Sans Code', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
     Consolas, 'Liberation Mono', monospace;
 }
+
+.shadow-hard {
+  box-shadow: 6px 6px 0px 0px var(--color-secondary-200);
+}
