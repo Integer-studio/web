@@ -3,9 +3,12 @@
 ---
 
 <p
-  class="inline-block text-3xl tracking-tighter text-primary-600 logo-container"
+  class="inline-flex items-baseline text-3xl tracking-tighter text-primary-600 logo-container"
 >
-  &#123;<span class="text-tertiary-900 mx-0.5 intlogo">int</span>&#125;
+  &#123;<span
+    class="text-tertiary-900 inline-block intlogo-wrapper overflow-hidden px-0.5 hover:italic"
+    ><span class="intlogo inline-block">integer</span></span
+  >&#125;
 </p>
 
 <script>
@@ -18,24 +21,42 @@
   const text = document.querySelector('.intlogo');
 
   container?.addEventListener('mouseenter', () => {
-    gsap.to(text, {
+    const tl = gsap.timeline();
+    tl.to(text, {
       duration: 0.2,
-      text: {
-        value: 'integer',
-        type: 'diff',
-      },
-      ease: 'none',
-    });
+      x: -20,
+      opacity: 0,
+      ease: 'power2.in',
+    })
+      .set(text, {
+        text: { value: '&#8592;domů' },
+        x: 20,
+      })
+      .to(text, {
+        duration: 0.2,
+        x: 0,
+        opacity: 1,
+        ease: 'power2.out',
+      });
   });
 
   container?.addEventListener('mouseleave', () => {
-    gsap.to(text, {
+    const tl = gsap.timeline();
+    tl.to(text, {
       duration: 0.2,
-      text: {
-        value: 'int',
-        type: 'diff',
-      },
-      ease: 'none',
-    });
+      x: 20,
+      opacity: 0,
+      ease: 'power2.in',
+    })
+      .set(text, {
+        text: { value: 'integer' },
+        x: -20,
+      })
+      .to(text, {
+        duration: 0.2,
+        x: 0,
+        opacity: 1,
+        ease: 'power2.out',
+      });
   });
 </script>
