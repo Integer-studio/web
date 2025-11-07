@@ -4,6 +4,22 @@ const { text, href } = Astro.props;
 
 <a
   href={href}
-  class="inline-block p-3 bg-primary-700 text-white text-center lowercase hover:uppercase hover:scale-105 active:scale-95 duration-150 transition-all font-bold font-mono text-lg"
+  class="inline-block py-3 px-4 bg-secondary-700 text-tertiary-50 custom-button text-center hover:italic font-bold font-mono"
   >{text}</a
 >
+
+<style>
+  .custom-button {
+    box-shadow: 6px 6px 0px 0px var(--color-secondary-300);
+    transition: all 150ms ease-in-out;
+  }
+  .custom-button:hover {
+    box-shadow: 10px 10px 0px 0px var(--color-secondary-300);
+    transform: translate(-4px, -4px);
+  }
+
+  .custom-button:active {
+    box-shadow: 4px 4px 0px 0px var(--color-secondary-300);
+    transform: translate(2px, 2px);
+  }
+</style>
