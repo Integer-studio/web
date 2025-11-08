@@ -48,4 +48,12 @@ const { id, type, label, placeholder, required } = Astro.props;
     margin-right: 4px;
     font-size: 14px;
   }
+
+  :global(form.was-validated)
+    label[data-required='true']:has(input:invalid)::before,
+  :global(form.was-validated)
+    label[data-required='true']:has(textarea:invalid)::before {
+    color: red;
+    opacity: 1;
+  }
 </style>

@@ -5,7 +5,7 @@ import FormInput from './FormInput.astro';
 <section
   class="col-span-12 md:col-span-8 grid-cols-12 md:grid-cols-8 grid border-b py-12"
 >
-  <form action="" class="col-span-6 col-start-2 space-y-6">
+  <form action="" id="contact-form" class="col-span-6 col-start-2 space-y-6">
     <FormInput
       id="name"
       type="text"
@@ -58,3 +58,12 @@ import FormInput from './FormInput.astro';
     transform: translate(2px, 2px);
   }
 </style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const submitButton = form?.querySelector('button[type="submit"]');
+
+  submitButton?.addEventListener('click', () => {
+    form?.classList.add('was-validated');
+  });
+</script>
