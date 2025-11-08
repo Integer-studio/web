@@ -9,30 +9,52 @@ import FormInput from './FormInput.astro';
     <FormInput
       id="name"
       type="text"
-      label="*Jméno:"
+      label="Jméno:"
       placeholder="vaše jméno ..."
       required="true"
     />
     <FormInput
       id="email"
       type="email"
-      label="*Email:"
+      label="Email:"
       placeholder="váš email ..."
       required="true"
     />
     <FormInput
       id="company"
       type="text"
-      label="*Společnost:"
+      label="Společnost:"
       placeholder="vaše společnost ..."
       required="true"
     />
     <FormInput
       id="description"
       type="textarea"
-      label="*Popis:"
-      placeholder="prosím napište nám vaší představu projektu včetně požadavků, funkcí a velikosti ..."
+      label="Popis:"
+      placeholder="prosím napište nám vaší představu projektu včetně požadavků, funkcí a rozsahu ..."
       required="true"
     />
+    <button
+      type="submit"
+      class="py-3 px-4 w-full cursor-pointer bg-secondary-700 text-tertiary-50 custom-button text-center hover:italic font-bold font-mono"
+    >
+      Odeslat
+    </button>
   </form>
 </section>
+
+<style>
+  .custom-button {
+    box-shadow: 6px 6px 0px 0px var(--color-secondary-300);
+    transition: all 150ms ease-in-out;
+  }
+  .custom-button:hover {
+    box-shadow: 10px 10px 0px 0px var(--color-secondary-300);
+    transform: translate(-4px, -4px);
+  }
+
+  .custom-button:active {
+    box-shadow: 4px 4px 0px 0px var(--color-secondary-300);
+    transform: translate(2px, 2px);
+  }
+</style>
