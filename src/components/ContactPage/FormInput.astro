@@ -2,17 +2,40 @@
 const { id, type, label, placeholder } = Astro.props;
 ---
 
-<label for={id} class="inline-flex w-full border gap-4"
-  >{label}<input
-    type={type}
-    id={id}
-    placeholder={placeholder}
-    class="w-full caret-primary-600 appearance-none"
-  /></label
+<label
+  for={id}
+  class="inline-flex w-full border gap-3 text-lg pl-6 uppercase text-tertiary-700 bg-primary-50 font-medium items-baseline"
+  >{label}{
+    type === 'textarea' ? (
+      <textarea
+        id={id}
+        placeholder={placeholder}
+        class="py-6 pr-6 w-full text-primary-900 text-lg"
+        rows="3"
+      />
+    ) : (
+      <input
+        type={type}
+        id={id}
+        placeholder={placeholder}
+        class="py-6 pr-6 w-full text-primary-900 text-xl"
+      />
+    )
+  }</label
 >
 
 <style>
-  input:focus-visible {
+  input:focus-visible,
+  textarea:focus-visible {
     outline: none;
+  }
+
+  label {
+    font-variant-caps: all-small-caps;
+  }
+
+  input,
+  textarea {
+    font-variant-caps: normal;
   }
 </style>
