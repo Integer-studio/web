@@ -1,5 +1,5 @@
 ---
-const { id, type, label, placeholder } = Astro.props;
+const { id, type, label, placeholder, required } = Astro.props;
 ---
 
 <label
@@ -12,6 +12,7 @@ const { id, type, label, placeholder } = Astro.props;
         placeholder={placeholder}
         class="py-6 pr-6 w-full text-primary-900 text-lg"
         rows="3"
+        required={required}
       />
     ) : (
       <input
@@ -19,6 +20,7 @@ const { id, type, label, placeholder } = Astro.props;
         id={id}
         placeholder={placeholder}
         class="py-6 pr-6 w-full text-primary-900 text-xl"
+        required={required}
       />
     )
   }</label
