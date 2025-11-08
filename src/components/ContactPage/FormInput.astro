@@ -4,12 +4,13 @@ const { id, type, label, placeholder, required } = Astro.props;
 
 <label
   for={id}
-  class="inline-flex w-full border text-lg pl-6 uppercase text-tertiary-700 bg-primary-50 font-medium items-baseline font-mono"
+  class="inline-flex w-full border text-lg pl-6 uppercase text-tertiary-700 bg-primary-50 font-medium items-baseline font-mono mb-6"
   data-required={required}
   >{label}{
     type === 'textarea' ? (
       <textarea
         id={id}
+        name={id}
         placeholder={placeholder}
         class="py-6 pr-6 pl-3 w-full text-primary-900 text-lg font-sans"
         rows="3"
@@ -19,6 +20,7 @@ const { id, type, label, placeholder, required } = Astro.props;
       <input
         type={type}
         id={id}
+        name={id}
         placeholder={placeholder}
         class="py-6 pr-6 pl-3 w-full text-primary-900 text-xl font-sans"
         required={required}

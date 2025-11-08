@@ -5,7 +5,19 @@ import FormInput from './FormInput.astro';
 <section
   class="col-span-12 md:col-span-8 grid-cols-12 md:grid-cols-8 grid border-b py-12"
 >
-  <form action="" id="contact-form" class="col-span-6 col-start-2 space-y-6">
+  <form
+    action="/api/contact"
+    method="POST"
+    id="contact-form"
+    class="col-span-6 col-start-2"
+  >
+    <!-- <div
+      class="cf-turnstile"
+      data-sitekey={import.meta.env.TURNSTILE_SITE_KEY ||
+        process.env.TURNSTILE_SITE_KEY}
+    >
+    </div> -->
+
     <FormInput
       id="name"
       type="text"
@@ -40,6 +52,7 @@ import FormInput from './FormInput.astro';
     >
       Odeslat
     </button>
+    <div id="form-message" class="hidden"></div>
   </form>
 </section>
 
@@ -61,9 +74,61 @@ import FormInput from './FormInput.astro';
 
 <script>
   const form = document.getElementById('contact-form') as HTMLFormElement;
-  const submitButton = form?.querySelector('button[type="submit"]');
+  const submitButton = form?.querySelector(
+    'button[type="submit"]'
+  ) as HTMLButtonElement;
+  const formMessage = document.getElementById('form-message') as HTMLDivElement;
 
   submitButton?.addEventListener('click', () => {
     form?.classList.add('was-validated');
   });
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Odesílání...';
+
+      formMessage.classList.add('hidden');
+
+      try {
+        const formData = new FormData(form);
+
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          formMessage.textContent = result.message;
+          formMessage.className =
+            'mt-6 p-4 bg-primary-100 text-primary-800 border';
+          form.reset();
+          form.classList.remove('was-validated');
+        } else {
+          formMessage.textContent = result.errors.join(', ');
+          formMessage.className =
+            'mt-6 p-4 bg-red-100 text-red-800 border border-red-300!';
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        formMessage.textContent =
+          'Nepodařilo se odeslat formulář :(\n Zkuste to prosím znovu, nebo nám napište přímo email.';
+        formMessage.className =
+          'mt-6 p-4 bg-red-100 text-red-800 border border-red-300!';
+      } finally {
+        submitButton.textContent = 'Odeslat';
+        submitButton.disabled = false;
+      }
+    });
+  }
 </script>
+
+<!-- <script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script> -->
