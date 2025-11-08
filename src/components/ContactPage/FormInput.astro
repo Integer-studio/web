@@ -1,0 +1,18 @@
+---
+const { id, type, label, placeholder } = Astro.props;
+---
+
+<label for={id} class="inline-flex w-full border gap-4"
+  >{label}<input
+    type={type}
+    id={id}
+    placeholder={placeholder}
+    class="w-full caret-primary-600 appearance-none"
+  /></label
+>
+
+<style>
+  input:focus-visible {
+    outline: none;
+  }
+</style>

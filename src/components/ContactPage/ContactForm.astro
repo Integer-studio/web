@@ -1,4 +1,16 @@
+---
+import FormInput from './FormInput.astro';
+---
+
 <section
-  class="col-span-12 md:col-span-6 grid-cols-subgrid grid border-b py-12"
+  class="col-span-12 md:col-span-8 grid-cols-12 md:grid-cols-8 grid border-b py-12"
 >
+  <form action="" class="col-span-6 col-start-2">
+    <FormInput
+      id="name"
+      type="text"
+      label="Jméno:"
+      placeholder="vaše jméno..."
+    />
+  </form>
 </section>
