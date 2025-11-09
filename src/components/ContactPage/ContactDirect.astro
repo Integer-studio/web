@@ -4,13 +4,15 @@
   >
     <span class="font-light">Nebo nám chcete napsat napřímo?</span> Rádi od vás uslyšíme.
   </h2>
-  <p
-    id="email-text"
-    class="text-primary-700 font-medium text-[7vw] text-center col-span-12 cursor-pointer select-none"
-    data-email="tym@intstudio.cz"
-  >
-    tym@intstudio.cz
-  </p>
+  <div class="col-span-12 flex justify-center">
+    <p
+      id="email-text"
+      class="text-primary-700 font-medium text-[7vw] cursor-pointer select-none inline-block px-4"
+      data-email="tym@intstudio.cz"
+    >
+      tym@intstudio.cz
+    </p>
+  </div>
   <div
     id="copy-cursor"
     class="fixed pointer-events-none z-50 px-4 py-2 bg-tertiary-50 text-tertiary-800 border border-tertiary-800! font-medium whitespace-nowrap"
@@ -32,8 +34,8 @@
     let isHovering = false;
 
     gsap.set(copyCursor, {
-      xPercent: -50,
-      yPercent: -50,
+      xPercent: 0,
+      yPercent: 0,
       opacity: 0,
       scale: 0.8,
     });
