@@ -11,13 +11,6 @@ import FormInput from './FormInput.astro';
     id="contact-form"
     class="col-span-6 col-start-2"
   >
-    <!-- <div
-      class="cf-turnstile"
-      data-sitekey={import.meta.env.TURNSTILE_SITE_KEY ||
-        process.env.TURNSTILE_SITE_KEY}
-    >
-    </div> -->
-
     <FormInput
       id="name"
       type="text"
@@ -126,9 +119,3 @@ import FormInput from './FormInput.astro';
     });
   }
 </script>
-
-<!-- <script
-  is:inline
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-  async
-  defer></script> -->
