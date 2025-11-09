@@ -1,15 +1,23 @@
 ---
 const { firstname, surname, img } = Astro.props;
 import { Image } from 'astro:assets';
+import { ArrowRight } from '@lucide/astro';
 ---
 
 <a
-  class="col-span-12 group border-b py-6 cursor-pointer hover:text-primary-600 transition-all duration-200 ease-in-out text-[7vw] font-bold text-center block"
+  class="col-span-12 group border-b py-6 cursor-pointer hover:text-primary-600 transition-all duration-200 ease-in-out text-[7vw] font-bold text-center block relative"
   href=`/about/${firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`
 >
-  {firstname}<Image
-    src={img}
-    alt=`${firstname} ${surname}, fotografie`
-    class="inline-block aspect-4/5 w-[10vw] grayscale mx-3 group-hover:grayscale-0"
-  />{surname}
+  {firstname}<div
+    class="inline-block w-[10vw] aspect-4/5 overflow-hidden mx-3 relative align-middle"
+  >
+    <Image
+      src={img}
+      alt=`${firstname} ${surname}, fotografie`
+      class="absolute inset-0 h-full w-auto object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-200 ease-in-out"
+    />
+  </div>{surname}
+  <ArrowRight
+    class="absolute right-4 w-[8vw] h-[8vw] top-[50%] -translate-y-1/2 -translate-x-8 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 delay-100 transition-all duration-200 ease-in-out"
+  />
 </a>
