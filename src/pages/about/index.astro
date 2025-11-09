@@ -2,6 +2,24 @@
 import Layout from '../../layouts/Layout.astro';
 import Person from '../../components/AboutPage/Person.astro';
 import placeholder from '../../images/team/placeholder.jpg';
+
+const persons = [
+  { firstname: 'Tomáš', surname: 'Pelikán', img: placeholder },
+  { firstname: 'Matyáš', surname: 'Petr', img: placeholder },
+  { firstname: 'Tonda', surname: 'Kučera', img: placeholder },
+  { firstname: 'Oskar', surname: 'Pihrt', img: placeholder },
+];
+
+function shuffle<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+const randomizedPersons = shuffle(persons);
 ---
 
 <Layout>
@@ -11,9 +29,14 @@ import placeholder from '../../images/team/placeholder.jpg';
     >
       Náš tým
     </h1>
-    <Person firstname="Tomáš" surname="Pelikán" img={placeholder} />
-    <Person firstname="Matyáš" surname="Petr" img={placeholder} />
-    <Person firstname="Tonda" surname="Kučera" img={placeholder} />
-    <Person firstname="Oskar" surname="Pihrt" img={placeholder} />
+    {
+      randomizedPersons.map((person) => (
+        <Person
+          firstname={person.firstname}
+          surname={person.surname}
+          img={person.img}
+        />
+      ))
+    }
   </section>
 </Layout>
