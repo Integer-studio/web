@@ -1,6 +1,10 @@
+---
+import { Copy } from '@lucide/astro';
+---
+
 <section class="col-span-12 grid-cols-subgrid py-12 p-6 relative">
   <h2
-    class="font-semibold text-3xl leading-13 text-primary-700 text-center col-span-10 col-start-2 md:col-span-8 md:col-start-3 mb-4"
+    class="font-semibold text-2xl md:text-3xl md:leading-13 text-primary-700 text-center col-span-10 col-start-2 md:col-span-8 md:col-start-3 mb-4"
   >
     <span class="font-light">Nebo nám chcete napsat napřímo?</span> Rádi od vás uslyšíme.
   </h2>
@@ -12,6 +16,13 @@
     >
       tym@intstudio.cz
     </p>
+    <button
+      class="md:hidden text-tertiary-700"
+      type="button"
+      onclick="handleMobileCopy()"
+    >
+      <Copy class="w-6 h-6" /></button
+    >
   </div>
   <div
     id="copy-cursor"
@@ -21,6 +32,17 @@
     kopírovat
   </div>
 </section>
+
+<script is:inline>
+  function handleMobileCopy() {
+    navigator.clipboard.writeText('tym@intstudio.cz');
+    const button = event.target.closest('button');
+    if (button) {
+      button.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M20 6 9 17l-5-5"/></svg>';
+    }
+  }
+</script>
 
 <script>
   import { gsap } from 'gsap';
