@@ -1,10 +1,134 @@
-<section class="col-span-12 grid-cols-subgrid py-12 p-6">
+<section class="col-span-12 grid-cols-subgrid py-12 p-6 relative">
   <h2
     class="font-semibold text-3xl leading-13 text-primary-700 text-center col-span-10 col-start-2 md:col-span-8 md:col-start-3 mb-4"
   >
     <span class="font-light">Nebo nám chcete napsat napřímo?</span> Rádi od vás uslyšíme.
   </h2>
-  <p class="text-primary-700 font-medium text-[7vw] text-center col-span-12">
+  <p
+    id="email-text"
+    class="text-primary-700 font-medium text-[7vw] text-center col-span-12 cursor-pointer select-none"
+    data-email="tym@intstudio.cz"
+  >
     tym@intstudio.cz
   </p>
+  <div
+    id="copy-cursor"
+    class="fixed pointer-events-none z-50 px-4 py-2 bg-tertiary-50 text-tertiary-800 border border-tertiary-800! font-medium whitespace-nowrap"
+    style="left: 0; top: 0;"
+  >
+    kopírovat
+  </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const emailText = document.querySelector('#email-text') as HTMLElement;
+  const copyCursor = document.querySelector('#copy-cursor') as HTMLElement;
+
+  if (emailText && copyCursor) {
+    let cursorX = 0;
+    let cursorY = 0;
+    let isHovering = false;
+
+    gsap.set(copyCursor, {
+      xPercent: -50,
+      yPercent: -50,
+      opacity: 0,
+      scale: 0.8,
+    });
+
+    const xTo = gsap.quickTo(copyCursor, 'x', {
+      duration: 0.3,
+      ease: 'power2.out',
+    });
+    const yTo = gsap.quickTo(copyCursor, 'y', {
+      duration: 0.3,
+      ease: 'power2.out',
+    });
+
+    // Mouse move handler - update cursor position
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+
+      if (isHovering) {
+        xTo(cursorX);
+        yTo(cursorY);
+      }
+    };
+
+    // Mouse enter handler - show cursor with animation
+    const handleMouseEnter = (e: MouseEvent) => {
+      isHovering = true;
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+
+      gsap.set(copyCursor, { x: cursorX, y: cursorY });
+
+      const tl = gsap.timeline();
+      tl.to(copyCursor, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+        ease: 'back.out(1.7)',
+      });
+    };
+
+    // Mouse leave handler - hide cursor with animation
+    const handleMouseLeave = () => {
+      isHovering = false;
+
+      const tl = gsap.timeline();
+
+      tl.to(copyCursor, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.2,
+        ease: 'power2.in',
+      }).to(copyCursor, {
+        innerHTML: 'kopírovat',
+        duration: 0,
+      });
+    };
+
+    const handleClick = async () => {
+      const email = emailText.getAttribute('data-email');
+
+      if (email) {
+        try {
+          await navigator.clipboard.writeText(email);
+
+          // Success feedback animation
+          const tl = gsap.timeline();
+          tl.to(copyCursor, {
+            innerHTML: 'máte ho ve schránce!',
+            scale: 1.1,
+            duration: 0.2,
+            ease: 'back.out(2)',
+          }).to(copyCursor, {
+            scale: 1,
+            duration: 0.2,
+            ease: 'power2.out',
+          });
+        } catch (err) {
+          console.error('Failed to copy email:', err);
+        }
+      }
+    };
+
+    // Attach event listeners
+    emailText.addEventListener('mouseenter', handleMouseEnter);
+    emailText.addEventListener('mouseleave', handleMouseLeave);
+    emailText.addEventListener('mousemove', handleMouseMove);
+    emailText.addEventListener('click', handleClick);
+
+    // Cleanup function (for Astro view transitions)
+    document.addEventListener('astro:before-swap', () => {
+      emailText.removeEventListener('mouseenter', handleMouseEnter);
+      emailText.removeEventListener('mouseleave', handleMouseLeave);
+      emailText.removeEventListener('mousemove', handleMouseMove);
+      emailText.removeEventListener('click', handleClick);
+    });
+  }
+</script>
