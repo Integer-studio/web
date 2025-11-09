@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Person from '../../components/AboutPage/Person.astro';
+import placeholder from '../../images/team/placeholder.jpg';
+---
+
+<Layout>
+  <section class="col-span-12 grid-cols-subgrid py-24 border-b">
+    <h1
+      class="font-semibold text-5xl leading-13 text-primary-700 text-center col-span-12 pb-24 border-b"
+    >
+      Náš tým
+    </h1>
+    <Person firstname="Tomáš" surname="Pelikán" img={placeholder} />
+    <Person firstname="Matyáš" surname="Petr" img={placeholder} />
+    <Person firstname="Tonda" surname="Kučera" img={placeholder} />
+    <Person firstname="Oskar" surname="Pihrt" img={placeholder} />
+  </section>
+</Layout>

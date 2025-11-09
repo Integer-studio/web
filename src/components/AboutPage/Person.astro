@@ -1,0 +1,15 @@
+---
+const { firstname, surname, img } = Astro.props;
+import { Image } from 'astro:assets';
+---
+
+<a
+  class="col-span-12 group border-b py-6 cursor-pointer hover:text-primary-600 transition-all duration-200 ease-in-out text-[7vw] font-bold text-center block"
+  href=`/about/${firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`
+>
+  {firstname}<Image
+    src={img}
+    alt=`${firstname} ${surname}, fotografie`
+    class="inline-block aspect-4/5 w-[10vw] grayscale mx-3 group-hover:grayscale-0"
+  />{surname}
+</a>
