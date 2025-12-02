@@ -8,6 +8,7 @@ const {
   width,
   height,
   tags = [],
+  year,
   isFullW,
 } = Astro.props;
 ---
@@ -21,28 +22,27 @@ const {
   <div class:list={['w-full p-4 mb-1', { 'mb-4': isFullW }]}>
     <header
       class:list={[
-        'flex items-start justify-between mb-0 gap-6',
+        'flex flex-col items-start justify-between mb-3 md:mb-0',
         { 'mb-3': isFullW },
       ]}
     >
+      <p class="font-mono text-tertiary-800">{year}</p>
       <h3
         class:list={[
-          'font-semibold',
+          'font-semibold mb-2',
           { 'text-4xl': isFullW, 'text-2xl': !isFullW },
         ]}
       >
         {name}
       </h3>
-      <div
-        class="font-mono text-lg flex flex-wrap justify-end text-tertiary-700"
-      >
-        {tags.map((tag: HTMLParagraphElement) => <p class="tag">{tag}</p>)}
+      <div class="font-mono text-sm flex flex-wrap gap-x-3 text-tertiary-700">
+        {tags.map((tag: HTMLParagraphElement) => <p class="">[{tag}]</p>)}
       </div>
     </header>
     <p
       class:list={[
-        'text-lg text-tertiary-700',
-        { 'w-2/3': isFullW, 'w-full': !isFullW },
+        'md:text-lg text-tertiary-700',
+        { 'md:w-2/3': isFullW, 'w-full': !isFullW },
       ]}
     >
       {description}
@@ -57,10 +57,3 @@ const {
     class="w-full border-t border-dashed pt-0.5"
   />
 </article>
-
-<style>
-  .tag + .tag:before {
-    content: '- ';
-    margin-left: 1ch;
-  }
-</style>
