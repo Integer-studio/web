@@ -47,6 +47,11 @@ import { Menu } from '@lucide/astro';
   #menu-toggle.menu-open svg:nth-child(2) {
     display: block;
   }
+
+  /* Disable transition during swipe for smooth following */
+  #menu.swiping {
+    transition: none;
+  }
 </style>
 
 <script>
@@ -54,17 +59,84 @@ import { Menu } from '@lucide/astro';
   const menu = document.getElementById('menu');
 
   if (menuToggle && menu) {
-    menuToggle.addEventListener('click', () => {
-      const isOpen = menuToggle.classList.toggle('menu-open');
-      menuToggle.setAttribute('aria-expanded', isOpen.toString());
-
-      if (isOpen) {
+    // Toggle menu function
+    const toggleMenu = (open: boolean) => {
+      if (open) {
+        menuToggle.classList.add('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'true');
         menu.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        document.body.style.overflow = 'hidden';
       } else {
+        menuToggle.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
         menu.classList.add('translate-x-full');
         document.body.style.overflow = '';
       }
+    };
+
+    // Click toggle
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.classList.contains('menu-open');
+      toggleMenu(!isOpen);
+    });
+
+    // Touch swipe handling
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchCurrentX = 0;
+    let isSwiping = false;
+
+    menu.addEventListener('touchstart', (e) => {
+      if (window.innerWidth >= 768) return; // Only on mobile
+      if (!menuToggle.classList.contains('menu-open')) return;
+
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSwiping = false;
+    });
+
+    menu.addEventListener('touchmove', (e) => {
+      if (window.innerWidth >= 768) return;
+      if (!menuToggle.classList.contains('menu-open')) return;
+
+      touchCurrentX = e.touches[0].clientX;
+      const touchCurrentY = e.touches[0].clientY;
+      const diffX = touchCurrentX - touchStartX;
+      const diffY = touchCurrentY - touchStartY;
+
+      // Determine if this is a horizontal swipe
+      if (!isSwiping && Math.abs(diffX) > 10) {
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          isSwiping = true;
+          menu.classList.add('swiping');
+        }
+      }
+
+      // Follow the finger during swipe (only if swiping right)
+      if (isSwiping && diffX > 0) {
+        e.preventDefault();
+        menu.style.transform = `translateX(${diffX}px)`;
+      }
+    });
+
+    menu.addEventListener('touchend', (e) => {
+      if (window.innerWidth >= 768) return;
+      if (!menuToggle.classList.contains('menu-open')) return;
+
+      menu.classList.remove('swiping');
+      menu.style.transform = '';
+
+      const diffX = touchCurrentX - touchStartX;
+      const swipeThreshold = 100; // Minimum distance to trigger close
+
+      // If swiped right beyond threshold, close the menu
+      if (isSwiping && diffX > swipeThreshold) {
+        toggleMenu(false);
+      }
+
+      isSwiping = false;
+      touchStartX = 0;
+      touchCurrentX = 0;
     });
 
     // Close menu when clicking on a menu item
@@ -72,20 +144,15 @@ import { Menu } from '@lucide/astro';
     menuItems.forEach((item) => {
       item.addEventListener('click', () => {
         if (window.innerWidth < 768) {
-          // Only on mobile
-          menuToggle.classList.remove('menu-open');
-          menuToggle.setAttribute('aria-expanded', 'false');
-          menu.classList.add('translate-x-full');
-          document.body.style.overflow = '';
+          toggleMenu(false);
         }
       });
     });
 
+    // Handle window resize
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768) {
-        menuToggle.classList.remove('menu-open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        toggleMenu(false);
       }
     });
   }
