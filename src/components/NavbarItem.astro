@@ -1,69 +1,10 @@
 ---
-const { href, name, highlight } = Astro.props;
+const { href, name, highlight, class } = Astro.props;
 ---
 
-<li class="nav-item">
   <a
     href={href}
-    class={`navbar-link block text-[16x] font-medium hover:italic font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150`}
+    class={`navbar-link block text-[16x] font-medium hover:italic font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150 ${Astro.props.class}`}
   >
     {name}
   </a>
-</li>
-
-<style>
-  /* .navbar-link::after {
-    content: '→';
-    display: inline-block;
-    margin-left: 0.25rem;
-    opacity: 0;
-    transform: translateX(-0.5rem);
-    transition:
-      opacity 0.2s,
-      transform 0.2s;
-    transition-delay: 200ms;
-    font-family: var(--font-sans);
-  }
-
-  .group:hover .navbar-link::after {
-    opacity: 1;
-    transform: translateX(0);
-  } */
-</style>
-
-<!-- <script>
-  import { gsap } from 'gsap';
-  import { TextPlugin } from 'gsap/TextPlugin';
-  import { Observer } from 'gsap/Observer';
-
-  gsap.registerPlugin(TextPlugin);
-  gsap.registerPlugin(Observer);
-
-  document.querySelectorAll('.navbar-link').forEach((link) => {
-    const name = link.innerHTML;
-
-    Observer.create({
-      target: link,
-      type: 'mouse, pointer',
-      onHover: () =>
-        gsap.to(link, {
-          text: {
-            value: name.toUpperCase(),
-            type: 'diff',
-            speed: 2,
-          },
-          ease: 'none',
-        }),
-      onHoverEnd: () =>
-        gsap.to(link, {
-          text: {
-            value: name.toLowerCase(),
-            type: 'diff',
-            rtl: true,
-            speed: 2,
-          },
-          ease: 'none',
-        }),
-    });
-  });
-</script> -->

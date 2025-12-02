@@ -1,6 +1,8 @@
 ---
 import NavbarItem from './NavbarItem.astro';
 import Logo from './Logo.astro';
+import { X } from '@lucide/astro';
+import { Menu } from '@lucide/astro';
 ---
 
 <header class="border-b border-primary-500 w-full fixed top-0 bg-white z-10">
@@ -13,12 +15,78 @@ import Logo from './Logo.astro';
     <a class="h-full" href="/">
       <Logo />
     </a>
-    <nav>
-      <menu class="flex gap-16">
-        <NavbarItem name="projekty" href="/projects" />
-        <NavbarItem name="o Integeru" href="/about" />
-        <NavbarItem name="kontakt" href="/contact" highlight="true" />
-      </menu>
+
+    <button
+      id="menu-toggle"
+      class="md:hidden z-50 w-8 h-8 flex flex-col justify-center items-center gap-1.5 focus:outline-none"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <Menu />
+      <X class="hidden" />
+    </button>
+
+    <!-- Navigation Menu -->
+    <nav
+      id="menu"
+      class="fixed top-0 right-0 bottom-0 left-0 bg-white flex flex-col justify-center items-center gap-8 md:gap-6 translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:static md:flex-row md:bg-transparent z-40"
+    >
+      <NavbarItem name="domů" href="/" class="md:hidden" />
+      <NavbarItem name="projekty" href="/projects" />
+      <NavbarItem name="o Integeru" href="/about" />
+      <NavbarItem name="kontakt" href="/contact" highlight="true" />
     </nav>
   </nav>
 </header>
+
+<style>
+  #menu-toggle.menu-open svg:nth-child(1) {
+    display: none;
+  }
+
+  #menu-toggle.menu-open svg:nth-child(2) {
+    display: block;
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('menu');
+
+  if (menuToggle && menu) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.classList.toggle('menu-open');
+      menuToggle.setAttribute('aria-expanded', isOpen.toString());
+
+      if (isOpen) {
+        menu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+      } else {
+        menu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Close menu when clicking on a menu item
+    const menuItems = menu.querySelectorAll('a');
+    menuItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth < 768) {
+          // Only on mobile
+          menuToggle.classList.remove('menu-open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          menu.classList.add('translate-x-full');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        menuToggle.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+</script>
