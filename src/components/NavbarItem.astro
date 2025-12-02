@@ -1,10 +1,10 @@
 ---
-const { href, name, highlight, class } = Astro.props;
+const { href, name, highlight } = Astro.props;
 ---
 
-  <a
-    href={href}
-    class={`navbar-link block text-[16x] font-medium hover:italic font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150 ${Astro.props.class}`}
-  >
-    {name}
-  </a>
+<a
+  href={href}
+  class={`navbar-link block text-[16x] font-medium hover:italic font-mono ${highlight === 'true' ? 'bg-tertiary-900 text-white hover:scale-110 active:scale-95' : ''} px-1.5 box-border transition-all duration-150 ${Astro.props.class}`}
+>
+  {name}
+</a>
