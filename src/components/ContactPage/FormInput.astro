@@ -4,15 +4,15 @@ const { id, type, label, placeholder, required } = Astro.props;
 
 <label
   for={id}
-  class="inline-flex w-full border text-lg pl-6 uppercase text-tertiary-700 bg-primary-50 font-medium items-baseline font-mono mb-6"
+  class="inline-flex md:flex-row flex-col w-full border text-lg pl-6 py-4 md:py-0 uppercase text-tertiary-700 bg-primary-50 font-medium items-baseline font-mono mb-6"
   data-required={required}
-  >{label}{
+  ><span class="label-text">{label}</span>{
     type === 'textarea' ? (
       <textarea
         id={id}
         name={id}
         placeholder={placeholder}
-        class="py-6 pr-6 pl-3 w-full text-primary-900 text-lg font-sans"
+        class="py-2 md:py-6 pr-6 md:pl-3 w-full text-primary-900 text-lg font-sans"
         rows="5"
         required={required}
       />
@@ -22,7 +22,7 @@ const { id, type, label, placeholder, required } = Astro.props;
         id={id}
         name={id}
         placeholder={placeholder}
-        class="py-6 pr-6 pl-3 w-full text-primary-900 text-xl font-sans"
+        class="py-2 md:py-6 pr-6 md:pl-3 w-full text-primary-900 text-xl font-sans"
         required={required}
       />
     )
@@ -39,12 +39,17 @@ const { id, type, label, placeholder, required } = Astro.props;
     font-variant-caps: all-small-caps;
   }
 
+  .label-text {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
   input,
   textarea {
     font-variant-caps: normal;
   }
 
-  label[data-required='true']::before {
+  label[data-required='true'] .label-text::before {
     content: '*';
     opacity: 0.6;
     margin-right: 4px;
@@ -52,9 +57,11 @@ const { id, type, label, placeholder, required } = Astro.props;
   }
 
   :global(form.was-validated)
-    label[data-required='true']:has(input:invalid)::before,
+    label[data-required='true']:has(input:invalid)
+    .label-text::before,
   :global(form.was-validated)
-    label[data-required='true']:has(textarea:invalid)::before {
+    label[data-required='true']:has(textarea:invalid)
+    .label-text::before {
     color: red;
     opacity: 1;
   }

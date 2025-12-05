@@ -3,13 +3,13 @@ import FormInput from './FormInput.astro';
 ---
 
 <section
-  class="col-span-12 grid-cols-subgrid grid py-20 bg-secondary-100 border-b"
+  class="col-span-12 grid-cols-subgrid grid py-8 md:py-20 bg-secondary-100 border-b"
 >
   <form
     action="/api/contact"
     method="POST"
     id="contact-form"
-    class="col-span-8 col-start-3"
+    class="col-span-12 px-4 md:px-0 md:col-span-8 md:col-start-3"
   >
     <FormInput
       id="name"
