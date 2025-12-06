@@ -10,7 +10,7 @@ const projects = (await getCollection('projects')).sort(
 
 <Layout>
   <section
-    class="grid grid-cols-2 pt-32 border-b gap-4 sm:grid-cols-2 col-span-12 px-4 md:px-0 md:col-span-10 md:col-start-2"
+    class="grid grid-cols-1 pt-32 gap-4 md:grid-cols-2 col-span-12 px-4 md:px-0 md:col-span-10 md:col-start-2"
   >
     <h1
       class="font-semibold text-5xl leading-13 text-primary-700 text-center col-span-2 mb-8"
@@ -19,18 +19,41 @@ const projects = (await getCollection('projects')).sort(
     </h1>
 
     {
-      projects.map((project, index) => (
-        <ProjectCard
-          image={project.data.image}
-          alt={`Cover image of ${project.data.name}`}
-          name={project.data.name}
-          description={project.data.description}
-          tags={project.data.tags}
-          year={project.data.year}
-          isFullW={index === 0}
-          href={`/projects/${project.id}`}
-        />
-      ))
+      projects
+        .filter((project) => project.data.featured)
+        .map((project, index) => (
+          <ProjectCard
+            image={project.data.image}
+            alt={`Cover image of ${project.data.name}`}
+            name={project.data.name}
+            description={project.data.description}
+            tags={project.data.tags}
+            year={project.data.year}
+            href={project.body ? `/projects/${project.id}` : null}
+          />
+        ))
+    }
+
+    <h2
+      class="font-semibold text-4xl leading-13 text-primary-700 text-center col-span-2 mb-6 mt-16"
+    >
+      Ostatní projekty
+    </h2>
+
+    {
+      projects
+        .filter((project) => !project.data.featured)
+        .map((project, index) => (
+          <ProjectCard
+            image={project.data.image}
+            alt={`Cover image of ${project.data.name}`}
+            name={project.data.name}
+            description={project.data.description}
+            tags={project.data.tags}
+            year={project.data.year}
+            href={project.body ? `/projects/${project.id}` : null}
+          />
+        ))
     }
   </section>
 </Layout>
