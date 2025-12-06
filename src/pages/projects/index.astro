@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.priority.valueOf() - a.data.priority.valueOf()
+);
+---
+
+<Layout>
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    {
+      projects.map((project, index) => (
+        <ProjectCard
+          image={project.image}
+          alt={`Cover image of ${project.name}`}
+          name={project.name}
+          description={project.description}
+          tags={project.tags}
+          year={project.year}
+          isFullW={index === 0}
+          href={`/projects/${project.id}`}
+        />
+      ))
+    }
+  </div>
+</Layout>

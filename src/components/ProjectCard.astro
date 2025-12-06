@@ -1,0 +1,63 @@
+---
+import { Picture } from 'astro:assets';
+const {
+  image,
+  alt,
+  name,
+  description,
+  width,
+  height,
+  tags = [],
+  year,
+  isFullW,
+  href,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['col-span-10 md:col-span-5', { 'md:col-span-10': isFullW }]}
+  ><article
+    class:list={[
+      ' border flex flex-col justify-between bg-primary-50 shadow-hard h-full',
+    ]}
+  >
+    <div class:list={['w-full p-4 mb-1', { 'mb-4': isFullW }]}>
+      <header
+        class:list={[
+          'flex flex-col items-start justify-between mb-3 md:mb-0',
+          { 'mb-3': isFullW },
+        ]}
+      >
+        <p class="font-mono text-tertiary-800">{year}</p>
+        <h3
+          class:list={[
+            'font-semibold mb-2',
+            { 'text-4xl': isFullW, 'text-2xl': !isFullW },
+          ]}
+        >
+          {name}
+        </h3>
+        <div class="font-mono text-sm flex flex-wrap gap-x-3 text-tertiary-700">
+          {tags.map((tag: HTMLParagraphElement) => <p class="">[{tag}]</p>)}
+        </div>
+      </header>
+      <p
+        class:list={[
+          'md:text-lg text-tertiary-700',
+          { 'md:w-2/3': isFullW, 'w-full': !isFullW },
+        ]}
+      >
+        {description}
+      </p>
+    </div>
+    <Picture
+      src={image}
+      formats={['avif', 'webp']}
+      alt={alt}
+      width={width}
+      height={height}
+      class="w-full border-t border-dashed pt-0.5"
+    />
+  </article></a
+>
