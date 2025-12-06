@@ -1,5 +1,13 @@
 ---
 import Project from '../ProjectCard.astro';
+
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.priority.valueOf() - a.data.priority.valueOf()
+);
 ---
 
 <section
@@ -8,34 +16,21 @@ import Project from '../ProjectCard.astro';
   <h2 class="col-span-2 text-center font-semibold text-3xl text-primary-700">
     Výběr naší práce
   </h2>
-  <Project
-    name="Tender portál"
-    image="/images/tender.png"
-    alt="UI design webové stránky pro kadeřnictví."
-    description="Webový systém pro řízení obchodních poptávek a tendrů, primárně určený pro architektonické a stavební projekty."
-    width="1760"
-    height="1045"
-    tags={['webová aplikace', 'vue.js', 'c# dotnet']}
-    year="2025–současnost"
-    isFullW
-  />
-  <Project
-    name="Kadeřnictví"
-    image="/images/kadernictvi.png"
-    alt="UI design webové stránky pro kadeřnictví."
-    description="UI design webové stránky pro kadeřnictví."
-    tags={['UI design']}
-    year="2025"
-    width="1280"
-    height="2760"
-  />
-  <Project
-    name="Kadeřnictví"
-    image="/images/kadernictvi.png"
-    alt="UI design webové stránky pro kadeřnictví."
-    description="UI design webové stránky pro kadeřnictví."
-    width="1280"
-    height="2760"
-  />
+  {
+    projects
+      .filter((project) => project.data.featured)
+      .map((project, index) => (
+        <ProjectCard
+          image={project.data.image}
+          alt={`Cover image of ${project.data.name}`}
+          name={project.data.name}
+          description={project.data.description}
+          tags={project.data.tags}
+          year={project.data.year}
+          href={project.body ? `/projects/${project.id}` : null}
+          isFullW
+        />
+      ))
+  }
 </section>
 <div class="col-span-12 border-t" aria-hidden="true"></div>
