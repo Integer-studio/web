@@ -11,7 +11,7 @@ import { Copy } from '@lucide/astro';
   <div class="col-span-12 flex justify-center">
     <p
       id="email-text"
-      class="text-primary-700 font-medium text-[7vw] cursor-pointer select-none inline-block px-4"
+      class="text-tertiary-900 font-medium text-[7vw] cursor-pointer select-none inline-block px-4"
       data-email="tym@intstudio.cz"
     >
       tym@intstudio.cz
@@ -24,6 +24,15 @@ import { Copy } from '@lucide/astro';
       <Copy class="w-6 h-6" /></button
     >
   </div>
+  <input
+    type="text"
+    id="hidden-email-input"
+    value="tym@intstudio.cz"
+    readonly
+    class="absolute opacity-0 pointer-events-none"
+    style="position: absolute; left: -9999px;"
+    aria-hidden="true"
+  />
   <div
     id="copy-cursor"
     class="fixed pointer-events-none z-50 px-4 py-2 bg-tertiary-50 text-tertiary-800 border border-tertiary-800! font-medium whitespace-nowrap"
@@ -35,11 +44,52 @@ import { Copy } from '@lucide/astro';
 
 <script is:inline>
   function handleMobileCopy() {
-    navigator.clipboard.writeText('tym@intstudio.cz');
+    const hiddenInput = document.getElementById('hidden-email-input');
     const button = event.target.closest('button');
-    if (button) {
-      button.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M20 6 9 17l-5-5"/></svg>';
+
+    if (hiddenInput) {
+      // Focus and select the hidden input
+      hiddenInput.style.position = 'fixed';
+      hiddenInput.style.left = '0';
+      hiddenInput.style.top = '0';
+      hiddenInput.style.opacity = '0';
+      hiddenInput.focus();
+      hiddenInput.select();
+      hiddenInput.setSelectionRange(0, 99999); // For mobile devices
+
+      try {
+        // Try modern clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText('tym@intstudio.cz')
+            .then(() => {
+              if (button) {
+                button.innerHTML =
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M20 6 9 17l-5-5"/></svg>';
+              }
+            })
+            .catch(() => {
+              // Fallback to execCommand
+              const success = document.execCommand('copy');
+              if (success && button) {
+                button.innerHTML =
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M20 6 9 17l-5-5"/></svg>';
+              }
+            });
+        } else {
+          // Use execCommand for older browsers
+          const success = document.execCommand('copy');
+          if (success && button) {
+            button.innerHTML =
+              '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M20 6 9 17l-5-5"/></svg>';
+          }
+        }
+      } finally {
+        // Hide the input again
+        hiddenInput.style.position = 'absolute';
+        hiddenInput.style.left = '-9999px';
+        hiddenInput.blur();
+      }
     }
   }
 </script>
