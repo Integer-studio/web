@@ -1,0 +1,51 @@
+---
+import Layout from './Layout.astro';
+import { Picture } from 'astro:assets';
+const { frontmatter } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/images/projects/*.{png,jpg,jpeg,gif,webp}',
+  { eager: true }
+);
+
+const cover = images[frontmatter.image].default;
+---
+
+<Layout>
+  <article class="col-span-10 col-start-2 py-24">
+    <header>
+      <Picture
+        src={cover}
+        alt={`${frontmatter.name} header picture`}
+        class="mb-4"
+      />
+      <div class="mb-2 flex items-baseline justify-between font-semibold">
+        <h1 class="text-3xl">{frontmatter.name}</h1>
+        <p class="text-xl">
+          {frontmatter.year}
+        </p>
+      </div>
+      <div class="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3">
+        {
+          frontmatter.links?.map(
+            (link: { url: string; name: string }, index: number) => (
+              <a
+                href={link.url}
+                class:list={[
+                  'border block px-3 py-1 text-center font-semibold transition-all duration-100 ease-in-out hover:scale-105',
+                  { 'bg-primary-700 text-white': index === 0 },
+                ]}
+                target="_blank"
+              >
+                {link.name}
+              </a>
+            )
+          )
+        }
+      </div>
+    </header>
+    <main class="prose prose-a:underline mx-auto">
+      <slot />
+    </main>
+  </article>
+</Layout>

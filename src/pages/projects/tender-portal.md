@@ -1,4 +1,5 @@
 ---
+layout: ../../layouts/ProjectLayout.astro
 name: Tender portál
 image: /src/images/projects/tender.png
 description: Webový systém pro řízení obchodních poptávek a tendrů, primárně určený pro architektonické a stavební projekty.
@@ -7,3 +8,7 @@ year: 2025–současnost
 priority: 10
 featured: true
 ---
+
+# Tender portál
+
+Webový systém pro řízení obchodních poptávek a tendrů, primárně určený pro architektonické a stavební projekty.

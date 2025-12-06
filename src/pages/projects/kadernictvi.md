@@ -1,4 +1,5 @@
 ---
+layout: ../../layouts/ProjectLayout.astro
 name: Kadeřnictví Eva Uhlíhová
 image: /src/images/projects/kadernictvi.png
 description: UI design webové stránky pro kadeřnictví Evy Uhlíkové
