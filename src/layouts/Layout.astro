@@ -30,18 +30,61 @@ import Navbar from '../components/Navbar.astro';
     >
       <slot />
     </main>
+    <footer class="border-t">
+      <div
+        class="border-x mx-4 md:mx-12 grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-12 px-6 py-8"
+      >
+        <div>
+          <p class="text-4xl tracking-tighter text-primary-600 mb-4">
+            &#123;<span class="text-tertiary-900 px-0.5">integer studio</span
+            >&#125;
+          </p>
+          <p class="text-tertiary-700">
+            &COPY; Integer studio 2025. Všechna práva vyhrazena.
+          </p>
+        </div>
+        <div class="links font-mono">
+          <p
+            class="uppercase tracking-tight text-shadow-tertiary-700 text-sm mb-2"
+          >
+            Navigace
+          </p>
+          <a href="/">Domů</a>
+          <a href="/projects">Projekty</a>
+          <a href="/about">O Integeru</a>
+          <a href="/contact">Kontakt</a>
+        </div>
+        <div class="links font-mono">
+          <p
+            class="uppercase tracking-tight text-shadow-tertiary-700 text-sm mb-2"
+          >
+            Kontakt
+          </p>
+          <a href="https://github.com/Integer-studio">Github</a>
+          <p>tym@intstudio.cz</p>
+        </div>
+      </div>
+    </footer>
   </body>
-</html>
 
-<style is:global>
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    color: var(--color-tertiary-900);
-  }
-  * {
-    border-color: var(--color-primary-500);
-  }
-</style>
+  <style is:global>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      color: var(--color-tertiary-900);
+    }
+    * {
+      border-color: var(--color-primary-500);
+    }
+    footer .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    footer .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</html>
