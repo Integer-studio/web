@@ -1,0 +1,9 @@
+---
+const { text } = Astro.props;
+---
+
+<p
+  class={`text-tertiary-700 text-sm font-mono border border-secondary-800/10! bg-tertiary-700/5 ${Astro.props.class}`}
+>
+  [{text}]
+</p>
