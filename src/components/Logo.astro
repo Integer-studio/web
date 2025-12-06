@@ -8,51 +8,57 @@
 </p>
 
 <script>
-  import { gsap } from 'gsap';
-  import { TextPlugin } from 'gsap/TextPlugin';
+  // Only load GSAP and run animations on desktop devices (768px and above)
+  const isDesktop = window.matchMedia('(min-width: 768px)').matches;
 
-  gsap.registerPlugin(TextPlugin);
+  if (isDesktop) {
+    Promise.all([import('gsap'), import('gsap/TextPlugin')]).then(
+      ([{ gsap }, { TextPlugin }]) => {
+        gsap.registerPlugin(TextPlugin);
 
-  const container = document.querySelector('.logo-container');
-  const text = document.querySelector('.intlogo');
+        const container = document.querySelector('.logo-container');
+        const text = document.querySelector('.intlogo');
 
-  container?.addEventListener('mouseenter', () => {
-    const tl = gsap.timeline();
-    tl.to(text, {
-      duration: 0.2,
-      x: -20,
-      opacity: 0,
-      ease: 'power2.in',
-    })
-      .set(text, {
-        text: { value: '&#8592;domů' },
-        x: 20,
-      })
-      .to(text, {
-        duration: 0.2,
-        x: 0,
-        opacity: 1,
-        ease: 'power2.out',
-      });
-  });
+        container?.addEventListener('mouseenter', () => {
+          const tl = gsap.timeline();
+          tl.to(text, {
+            duration: 0.2,
+            x: -20,
+            opacity: 0,
+            ease: 'power2.in',
+          })
+            .set(text, {
+              text: { value: '&#8592;domů' },
+              x: 20,
+            })
+            .to(text, {
+              duration: 0.2,
+              x: 0,
+              opacity: 1,
+              ease: 'power2.out',
+            });
+        });
 
-  container?.addEventListener('mouseleave', () => {
-    const tl = gsap.timeline();
-    tl.to(text, {
-      duration: 0.2,
-      x: 20,
-      opacity: 0,
-      ease: 'power2.in',
-    })
-      .set(text, {
-        text: { value: 'integer' },
-        x: -20,
-      })
-      .to(text, {
-        duration: 0.2,
-        x: 0,
-        opacity: 1,
-        ease: 'power2.out',
-      });
-  });
+        container?.addEventListener('mouseleave', () => {
+          const tl = gsap.timeline();
+          tl.to(text, {
+            duration: 0.2,
+            x: 20,
+            opacity: 0,
+            ease: 'power2.in',
+          })
+            .set(text, {
+              text: { value: 'integer' },
+              x: -20,
+            })
+            .to(text, {
+              duration: 0.2,
+              x: 0,
+              opacity: 1,
+              ease: 'power2.out',
+            });
+        });
+      }
+    );
+  }
 </script>
