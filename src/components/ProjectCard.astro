@@ -1,5 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
+import Tag from './Tag.astro';
 const {
   image,
   alt,
@@ -38,8 +39,8 @@ const {
         >
           {name}
         </h3>
-        <div class="font-mono text-sm flex flex-wrap gap-x-3 text-tertiary-700">
-          {tags.map((tag: HTMLParagraphElement) => <p class="">[{tag}]</p>)}
+        <div class="font-mono text-sm flex flex-wrap gap-x-3">
+          {tags.map((tag: string) => <Tag text={tag} />)}
         </div>
       </header>
       <p
