@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { Picture } from 'astro:assets';
 import ProjectCard from '../../components/ProjectCard.astro';
 
 const projects = (await getCollection('projects')).sort(
@@ -10,20 +9,28 @@ const projects = (await getCollection('projects')).sort(
 ---
 
 <Layout>
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <section
+    class="grid grid-cols-2 pt-32 border-b gap-4 sm:grid-cols-2 col-span-12 px-4 md:px-0 md:col-span-10 md:col-start-2"
+  >
+    <h1
+      class="font-semibold text-5xl leading-13 text-primary-700 text-center col-span-2 mb-8"
+    >
+      Vybrané projekty
+    </h1>
+
     {
       projects.map((project, index) => (
         <ProjectCard
-          image={project.image}
-          alt={`Cover image of ${project.name}`}
-          name={project.name}
-          description={project.description}
-          tags={project.tags}
-          year={project.year}
+          image={project.data.image}
+          alt={`Cover image of ${project.data.name}`}
+          name={project.data.name}
+          description={project.data.description}
+          tags={project.data.tags}
+          year={project.data.year}
           isFullW={index === 0}
           href={`/projects/${project.id}`}
         />
       ))
     }
-  </div>
+  </section>
 </Layout>
