@@ -2,28 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import Person from '../../components/AboutPage/Person.astro';
 import placeholder from '../../images/team/placeholder.jpg';
-
-const persons = [
-  { firstname: 'Tomáš', surname: 'Pelikán', img: placeholder },
-  { firstname: 'Matyáš', surname: 'Petr', img: placeholder },
-  { firstname: 'Tonda', surname: 'Kučera', img: placeholder },
-  { firstname: 'Oskar', surname: 'Pihrt', img: placeholder },
-];
-
-function shuffle<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-const randomizedPersons = shuffle(persons);
 ---
 
 <Layout>
-  <section class="col-span-12 grid grid-cols-subgrid pt-32 border-b">
+  <section class="col-span-12 grid grid-cols-subgrid pt-32">
     <div class="col-span-12 md:col-span-6 md:col-start-5 pb-32 px-4 md:px-0">
       <h1 class="font-semibold text-5xl text-primary-700 mb-4">O nás</h1>
       <p class="text-xl font-medium">
@@ -34,14 +16,33 @@ const randomizedPersons = shuffle(persons);
       </p>
     </div>
     <div class="col-span-12 border-b"></div>
-    {
-      randomizedPersons.map((person) => (
-        <Person
-          firstname={person.firstname}
-          surname={person.surname}
-          img={person.img}
-        />
-      ))
-    }
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 col-span-full gap-6 p-6"
+    >
+      <Person
+        firstname="Tonda"
+        surname="Kučera"
+        img={placeholder}
+        roles="Zakladatel, frontend developer"
+      />
+      <Person
+        firstname="Oskar"
+        surname="Pihrt"
+        img={placeholder}
+        roles="Zakladatel, fullstack developer"
+      />
+      <Person
+        firstname="Tomáš"
+        surname="Pelikán"
+        img={placeholder}
+        roles="Zakladatel, backend developer"
+      />
+      <Person
+        firstname="Matyáš"
+        surname="Petr"
+        img={placeholder}
+        roles="Zakladatel, backend developer"
+      />
+    </div>
   </section>
 </Layout>
