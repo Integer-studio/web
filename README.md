@@ -3,4 +3,22 @@
 
 A website for a small tech starup. We offer creating web pages and apps, so it's only logical we'd have one too.
 
-Built with astro with focus on speed and correct html semantics.
+## Techstack
+- Astro
+- Tailwind css
+
+## Run and build
+After you clone the code, you can run:
+```
+npm install
+```
+
+To start a dev server:
+```
+npm run dev
+```
+
+To build and preview:
+```
+npm run build && npm run preview
+```
