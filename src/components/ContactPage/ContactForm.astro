@@ -11,6 +11,15 @@ import FormInput from './FormInput.astro';
     id="contact-form"
     class="col-span-12 px-4 md:px-0 md:col-span-8 md:col-start-3"
   >
+    <input
+      type="text"
+      name="website"
+      autocomplete="off"
+      tabindex="-1"
+      aria-hidden="true"
+      class="honeypot"
+    />
+    <input type="hidden" name="_timestamp" id="form-timestamp" />
     <FormInput
       id="name"
       type="text"
@@ -45,11 +54,27 @@ import FormInput from './FormInput.astro';
     >
       Odeslat
     </button>
+    <div
+      class="cf-turnstile mt-4"
+      data-sitekey="0x4AAAAAAB_07tZnJbM6uz5S"
+      data-theme="light"
+    >
+    </div>
     <div id="form-message" class="hidden"></div>
   </form>
 </section>
 
 <style>
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    pointer-events: none;
+  }
+
   .custom-button {
     box-shadow: 6px 6px 0px 0px var(--color-secondary-300);
     transition: all 150ms ease-in-out;
@@ -86,6 +111,13 @@ import FormInput from './FormInput.astro';
     'button[type="submit"]'
   ) as HTMLButtonElement;
   const formMessage = document.getElementById('form-message') as HTMLDivElement;
+  const timestampField = document.getElementById(
+    'form-timestamp'
+  ) as HTMLInputElement;
+
+  if (timestampField) {
+    timestampField.value = Date.now().toString();
+  }
 
   submitButton?.addEventListener('click', () => {
     form?.classList.add('was-validated');
@@ -114,8 +146,7 @@ import FormInput from './FormInput.astro';
           formMessage.textContent = result.message;
           formMessage.className =
             'mt-6 p-4 bg-primary-100 text-primary-800 border';
-          form.reset();
-          form.classList.remove('was-validated');
+          if (window.turnstile) window.turnstile.reset();
         } else {
           formMessage.textContent = result.errors.join(', ');
           formMessage.className =

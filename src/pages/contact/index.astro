@@ -6,6 +6,7 @@ import ContactDirect from '../../components/ContactPage/ContactDirect.astro';
 ---
 
 <Layout>
+  <script is:inline slot="head" src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
   <ContactHero />
   <ContactForm />
   <ContactDirect />
