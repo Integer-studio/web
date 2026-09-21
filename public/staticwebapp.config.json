@@ -1,0 +1,10 @@
+{
+  "routes": [
+    { "route": "/about", "redirect": "/#o-nas", "statusCode": 301 },
+    { "route": "/about/*", "redirect": "/#o-nas", "statusCode": 301 },
+    { "route": "/contact", "redirect": "/#kontakt", "statusCode": 301 },
+    { "route": "/contact/*", "redirect": "/#kontakt", "statusCode": 301 },
+    { "route": "/projects", "redirect": "/#projekty", "statusCode": 301 },
+    { "route": "/projects/*", "redirect": "/#projekty", "statusCode": 301 }
+  ]
+}

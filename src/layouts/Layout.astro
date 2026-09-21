@@ -15,6 +15,19 @@ const {
   description = 'Jsme Integer Studio, malý tým který vytváří webové aplikace pro firmy dělané na míru jejich procesům.',
 } = Astro.props;
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL('/android-chrome-512x512.png', Astro.site);
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Integer studio',
+  url: Astro.site?.toString(),
+  logo: ogImageURL.toString(),
+  email: 'kontakt@intstudio.cz',
+  sameAs: ['https://github.com/Integer-studio'],
+};
+
 const navigation = [
   { name: 'Projekty', href: '#projekty' },
   { name: 'O nás', href: '#o-nas' },
@@ -31,6 +44,7 @@ const navigation = [
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,9 +56,26 @@ const navigation = [
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Integer studio" />
+    <meta property="og:locale" content="cs_CZ" />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationSchema)}
+    />
+
     <slot name="head" />
   </head>
   <body class="bg-paper">
