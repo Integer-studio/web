@@ -1,0 +1,24 @@
+---
+/**
+ * The two vertical gutter rules at the edges of the content column
+ * (x=160 and x=1352 at the 1512 design width).
+ *
+ * These deliberately do *not* live in GridFrame any more: GridFrame carries the
+ * section's vertical padding, so rules drawn inside it stopped short of the
+ * section edges and left a gap wherever two sections met. This is a sibling
+ * overlay pinned to the section box instead, so the rules run edge to edge.
+ *
+ * Place it as a direct child of a `relative` section. Dark sections only —
+ * on light sections the frame is not drawn at all.
+ *
+ * Below `md` the rules are hidden; at that width they would eat the viewport.
+ */
+---
+
+<div
+  aria-hidden="true"
+  class="pointer-events-none absolute inset-y-0 left-1/2 z-0 hidden w-full max-w-[var(--content-width)] -translate-x-1/2 md:block"
+>
+  <span class="absolute inset-y-0 left-0 w-px bg-rule"></span>
+  <span class="absolute inset-y-0 right-0 w-px bg-rule"></span>
+</div>

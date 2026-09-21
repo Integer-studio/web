@@ -2,12 +2,15 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const projects = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/pages/projects' }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: ({ image }) =>
     z.object({
       name: z.string(),
+      /* Short one-liner shown under the title on the featured card. */
+      subtitle: z.string().optional(),
       tags: z.array(z.string()),
       year: z.string(),
+      /* Used as the body of the small cards. */
       description: z.string(),
       image: image(),
       priority: z.number(),

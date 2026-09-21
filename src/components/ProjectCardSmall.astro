@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+/**
+ * Figma `530:24` / `530:26` — the 522 × 392 light card.
+ *
+ * Figma draws these with a title and nothing else; the description and the
+ * screenshot are agreed additions so the cards carry information, since they
+ * are not links.
+ *
+ * The screenshot slot is a fixed 16:9 box, inset on all four sides, filled with
+ * `object-cover` so it reaches all four corners and the radius reads. 16:9 is
+ * the one ratio to author project graphics at — anything else gets centre
+ * cropped to fit. At the frame width the slot is 464 × 261.
+ */
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+---
+
+<article class="flex min-h-[260px] flex-col rounded-xl bg-card p-6 md:p-[29px]">
+  <h3
+    class="font-serif text-[clamp(1.75rem,4vw,3rem)] leading-tight tracking-[0.03em] text-card-ink"
+  >
+    {entry.data.name}
+  </h3>
+  <p
+    class="mt-4 max-w-[380px] text-[15px] leading-[1.4] font-light tracking-[0.02em] text-ink-strong/70"
+  >
+    {entry.data.description}
+  </p>
+
+  <Image
+    src={entry.data.image}
+    alt={`Ukázka projektu ${entry.data.name}`}
+    widths={[464, 928]}
+    sizes="(min-width: 1512px) 464px, (min-width: 640px) 45vw, 90vw"
+    class="mt-5 aspect-[16/9] w-full rounded-lg object-cover object-center md:mt-6"
+  />
+</article>

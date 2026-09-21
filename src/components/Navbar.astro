@@ -3,22 +3,18 @@ import NavbarItem from './NavbarItem.astro';
 import Logo from './Logo.astro';
 import { X } from '@lucide/astro';
 import { Menu } from '@lucide/astro';
+import GridFrame from './GridFrame.astro';
 ---
 
-<header class="border-b border-primary-500 w-full fixed top-0 bg-white z-10">
-  <p class="w-full bg-amber-50 text-center p-1">
-    🚧 Stránka je stále ve vývoji. Omluvte prosím její nedostatky. 🚧
-  </p>
-  <nav
-    class="mx-4 md:mx-12 border-x border-primary-500 px-4 py-1 h-12 flex items-center justify-between"
-  >
-    <a class="h-full" href="/">
+<header class="fixed top-0 z-30 w-full border-b border-rule bg-ink">
+  <GridFrame class="flex h-12 items-center justify-between md:px-6">
+    <a class="flex h-full items-center" href="#top">
       <Logo />
     </a>
 
     <button
       id="menu-toggle"
-      class="md:hidden z-50 w-8 h-8 flex flex-col justify-center items-center gap-1.5 focus:outline-none"
+      class="z-50 h-8 w-8 text-paper md:hidden flex flex-col justify-center items-center gap-1.5 focus:outline-none"
       aria-label="Toggle menu"
       aria-expanded="false"
     >
@@ -29,14 +25,13 @@ import { Menu } from '@lucide/astro';
     <!-- Navigation Menu -->
     <nav
       id="menu"
-      class="fixed top-0 right-0 bottom-0 left-0 bg-white flex flex-col justify-center items-center gap-8 md:gap-6 translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out md:static md:flex-row md:bg-transparent z-40"
+      class="fixed top-0 right-0 bottom-0 left-0 z-40 flex translate-x-full flex-col items-center justify-center gap-8 bg-ink transition-transform duration-300 ease-in-out md:static md:translate-x-0 md:flex-row md:gap-6 md:bg-transparent"
     >
-      <NavbarItem name="domů" href="/" class="md:hidden" />
-      <NavbarItem name="projekty" href="/projects" />
-      <NavbarItem name="o Integeru" href="/about" />
-      <NavbarItem name="kontakt" href="/contact" highlight="true" />
+      <NavbarItem name="projekty" href="#projekty" />
+      <NavbarItem name="o nás" href="#o-nas" />
+      <NavbarItem name="kontakt" href="#kontakt" highlight="true" />
     </nav>
-  </nav>
+  </GridFrame>
 </header>
 
 <style>

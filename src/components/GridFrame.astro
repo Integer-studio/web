@@ -1,0 +1,30 @@
+---
+/**
+ * The gutter wrapper. Every section wraps in it.
+ *
+ * Reproduces the Figma frame: a 1192px content column centred in 1512px.
+ *
+ * The column width comes entirely from `--content-width`, which ramps its
+ * gutter smoothly up to the design's 160px, so there is no breakpoint at which
+ * the content is squeezed against the viewport edge.
+ *
+ * The visible gutter rules that mark the column edges are *not* drawn here —
+ * they are a separate `GutterRules` overlay, because this wrapper carries each
+ * section's vertical padding and rules drawn inside it would stop short of the
+ * section edges.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'relative mx-auto w-full max-w-[var(--content-width)]',
+    className,
+  ]}
+>
+  <slot />
+</div>

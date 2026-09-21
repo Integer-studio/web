@@ -2,60 +2,82 @@
 @plugin "@tailwindcss/typography";
 
 @font-face {
-  font-family: 'Google Sans Code';
+  font-family: 'Departure Mono';
   font-display: swap;
-  src: url('/GoogleSansCode-Medium.ttf') format('truetype');
-  font-weight: 500;
+  src: url('/DepartureMono-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
-}
-
-@font-face {
-  font-family: 'Google Sans Code';
-  font-display: swap;
-  src: url('/GoogleSansCode-MediumItalic.ttf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
+  unicode-range: U+0020-007E;
 }
 
 @theme {
-  --color-primary-50: rgb(249 254 249);
-  --color-primary-100: rgb(242 253 242);
-  --color-primary-200: rgb(223 251 223);
-  --color-primary-300: rgb(204 249 204);
-  --color-primary-400: rgb(166 244 166);
-  --color-primary-500: rgb(128 239 128);
-  --color-primary-600: rgb(115 215 115);
-  --color-primary-700: rgb(77 143 77);
-  --color-primary-800: rgb(58 108 58);
-  --color-primary-900: rgb(38 72 38);
-  --color-secondary-50: rgb(249 252 249);
-  --color-secondary-100: rgb(244 248 244);
-  --color-secondary-200: rgb(226 239 226);
-  --color-secondary-300: rgb(209 229 209);
-  --color-secondary-400: rgb(175 209 175);
-  --color-secondary-500: rgb(140 189 140);
-  --color-secondary-600: rgb(126 170 126);
-  --color-secondary-700: rgb(84 113 84);
-  --color-secondary-800: rgb(63 85 63);
-  --color-secondary-900: rgb(42 57 42);
-  --color-tertiary-50: rgb(248 249 248);
-  --color-tertiary-100: rgb(241 243 241);
-  --color-tertiary-200: rgb(221 226 221);
-  --color-tertiary-300: rgb(200 208 200);
-  --color-tertiary-400: rgb(159 173 159);
-  --color-tertiary-500: rgb(118 138 118);
-  --color-tertiary-600: rgb(106 124 106);
-  --color-tertiary-700: rgb(71 83 71);
-  --color-tertiary-800: rgb(53 62 53);
-  --color-tertiary-900: rgb(35 41 35);
+  /* Accent — the single Figma variable. CTA fill, hero accent word, logo. */
+  --color-accent: #80ef80;
+
+  /* The muted variant of the accent, and the only color any rule or grid line
+     may use. Rules were drawn in full accent before, which put two greens on
+     screen at once and made the frame shout louder than the content. */
+  --color-rule: #559255;
+
+  /* Surfaces */
+  --color-ink: #20211f; /* dark section background */
+  --color-ink-raised: #20201f; /* card surface on a dark section */
+  --color-paper: #f4f9f1; /* light page background */
+  --color-card: #e4ecdf; /* small project card on light */
+  --color-card-ink: #304026; /* small project card title */
+  --color-ink-strong: #202020; /* all text on light */
+
+  /* Text on dark */
+  --color-on-dark: #f5f5f5;
+  --color-on-dark-muted: #d5d5d5;
+  --color-on-dark-91: rgb(244 249 241 / 0.91);
+  --color-on-dark-65: rgb(244 249 241 / 0.65);
+
   --font-sans:
     'Host Grotesk', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  /* The Figma frame is 1512 wide with 160px gutters. Every pixel-exact value
+     from the design is gated on this, NOT on `xl` (1280) — below 1512 those
+     values do not fit and the gutters collapse. */
+  --breakpoint-frame: 1512px;
+
   --font-mono:
-    'Google Sans Code', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
-    Consolas, 'Liberation Mono', monospace;
+    'Departure Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
 }
 
-.shadow-hard {
-  box-shadow: 6px 6px 0px 0px var(--color-secondary-200);
+:root {
+  /* Inset of the horizontal rule pair from each section's own top/bottom edge.
+     Figma drifts to 45.25/39.14 in About and the footer; that is duplication
+     drift, not intent — one value everywhere. */
+  --rule-inset: 32px;
+
+  /* The gutter ramps smoothly up to the design's 160px instead of stepping,
+     so there is no width at which the content column is squeezed against the
+     viewport edge. The 1192px cap makes the ramp top out exactly at the Figma
+     frame: at 1512 the cap binds and the gutter is 160px on the nose. */
+  --gutter: 1rem;
+  --content-width: min(1192px, calc(100vw - 2 * var(--gutter)));
+
+  /* The padding inside the gutter rules (Figma: 64px at the frame width). */
+  --frame-pad: 1rem;
+
+  /* One vertical rhythm for every section, so the bands read as a set. It
+     ramps rather than stepping, and tops out at the Figma 104px at 1512. */
+  --section-pad: clamp(5rem, 1rem + 6vw, 104px);
+}
+
+@media (width >= 48rem) {
+  :root {
+    --gutter: clamp(3rem, 2rem + 4vw, 160px);
+    --frame-pad: clamp(1.5rem, 0.5rem + 3vw, 64px);
+  }
+}
+
+/* The page opens and closes on a dark section, so the overscroll gutter that
+   touch devices rubber-band into has to be dark too — `body` alone is painted
+   inside the scroll area and leaves that gutter white. */
+html {
+  background-color: var(--color-ink);
 }

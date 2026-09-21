@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import GridFrame from '../GridFrame.astro';
+import GlyphTexture from '../GlyphTexture.astro';
+import ProjectCardFeatured from '../ProjectCardFeatured.astro';
+import ProjectCardSmall from '../ProjectCardSmall.astro';
+
+/** Figma `530:3` / `530:4` / `530:19` / `530:24` / `530:26`. Light section. */
+const projects = await getCollection('projects');
+
+const featured = projects.find((p) => p.data.featured);
+const rest = projects
+  .filter((p) => p !== featured)
+  .sort((a, b) => b.data.priority - a.data.priority)
+  .slice(0, 2);
+---
+
+<section
+  id="projekty"
+  class="relative scroll-mt-12 overflow-hidden bg-paper py-[var(--section-pad)]"
+>
+  <h2
+    class="relative z-10 mb-[72px] text-center text-[clamp(2rem,6vw,4rem)] leading-[0.94] font-medium tracking-[0.02em] text-ink-strong"
+  >
+    Naše projekty
+  </h2>
+  <GlyphTexture seed={0x9101} />
+
+  <GridFrame class="relative z-10">
+    <div class="md:px-[var(--frame-pad)]">
+      {featured && <ProjectCardFeatured entry={featured} />}
+
+      {
+        rest.length > 0 && (
+          <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {rest.map((entry) => (
+              <ProjectCardSmall entry={entry} />
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </GridFrame>
+</section>

@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import { render, type CollectionEntry } from 'astro:content';
+
+/**
+ * Figma `530:19` — 1064 × 518 at the frame width.
+ *
+ * The split is expressed as grid fractions rather than absolute offsets, so it
+ * holds at every width between `md` and the frame instead of only landing at
+ * 1512: inside the card's 30px padding the copy takes 383 and the screenshot
+ * 621, which is exactly the Figma geometry once the card is 1064 wide.
+ *
+ * The 30px title / 50px body indent is a deliberate 20px hanging indent; it is
+ * kept from `md` up and collapses to a uniform 24px below that. The long copy
+ * comes from the entry's markdown body.
+ */
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<article
+  class="rounded-xl bg-ink-raised p-6 md:p-[30px] lg:grid lg:grid-cols-[383fr_621fr] frame:h-[518px]"
+>
+  <div class="min-w-0">
+    <h3
+      class="font-serif text-[clamp(1.75rem,4vw,3rem)] leading-tight tracking-[0.03em] text-paper"
+    >
+      {entry.data.name}
+    </h3>
+
+    {
+      entry.data.subtitle && (
+        <p class="mt-4 text-base leading-[1.35] tracking-[0.01em] text-on-dark-91 md:mt-6 md:pl-5 lg:pr-6">
+          {entry.data.subtitle}
+        </p>
+      )
+    }
+
+    <div
+      class="prose-featured mt-4 text-[15px] leading-[1.4] font-light tracking-[0.02em] text-on-dark-65 md:mt-5 md:pl-5 lg:pr-6"
+    >
+      <Content />
+    </div>
+  </div>
+
+  <Image
+    src={entry.data.image}
+    alt={`Ukázka aplikace ${entry.data.name}`}
+    widths={[621, 1242]}
+    sizes="(min-width: 1512px) 621px, (min-width: 1024px) 60vw, 90vw"
+    class="mt-6 aspect-[621/458] w-full rounded-lg object-cover object-left-top md:mt-8 lg:mt-0 lg:h-full"
+  />
+</article>
+
+<style>
+  .prose-featured :global(p + p) {
+    margin-top: 1em;
+  }
+</style>

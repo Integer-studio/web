@@ -1,13 +1,32 @@
 ---
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
+import GridFrame from '../components/GridFrame.astro';
+import Rule from '../components/Rule.astro';
+import GutterRules from '../components/GutterRules.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Integer studio',
+  description = 'Jsme Integer Studio, malý tým který vytváří webové aplikace pro firmy dělané na míru jejich procesům.',
+} = Astro.props;
+
+const navigation = [
+  { name: 'Projekty', href: '#projekty' },
+  { name: 'O nás', href: '#o-nas' },
+  { name: 'Kontakt', href: '#kontakt' },
+];
 ---
 
 <!doctype html>
 <html lang="cs">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -16,76 +35,87 @@ import Navbar from '../components/Navbar.astro';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
 
     <meta name="generator" content={Astro.generator} />
-    <title>Integer studio</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <slot name="head" />
   </head>
-  <body>
+  <body class="bg-paper">
     <Navbar />
-    <main
-      class="mx-4 md:mx-12 border-x border-primary-500 grid-cols-12 grid mt-12"
-    >
+    <main class="mt-12">
       <slot />
     </main>
-    <footer class="border-t">
-      <div
-        class="border-x mx-4 md:mx-12 grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-12 px-6 py-8"
-      >
-        <div>
-          <p class="text-4xl tracking-tighter text-primary-600 mb-4">
-            &#123;<span class="text-tertiary-900 px-0.5">integer studio</span
-            >&#125;
-          </p>
-          <p class="text-tertiary-700">
-            &COPY; Integer studio 2025. Všechna práva vyhrazena.
-          </p>
+
+    <footer class="relative bg-ink py-[var(--section-pad)]">
+      <Rule />
+      <GutterRules />
+
+      <GridFrame class="relative z-10">
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-4 md:px-[var(--frame-pad)]"
+        >
+          <div>
+            <p class="mb-4 text-4xl tracking-tighter text-accent">
+              &#123;<span class="px-0.5 text-paper">integer studio</span>&#125;
+            </p>
+            <p class="text-sm text-on-dark-65">
+              &COPY; Integer studio 2025. Všechna práva vyhrazena.
+            </p>
+          </div>
+
+          <!-- Column 2 is deliberately empty. -->
+          <div class="links md:col-start-3">
+            <p class="mb-2 text-sm tracking-tight text-paper uppercase">
+              Navigace
+            </p>
+            {navigation.map((item) => <a href={item.href}>{item.name}</a>)}
+          </div>
+
+          <div class="links md:col-start-4">
+            <p class="mb-2 text-sm tracking-tight text-paper uppercase">
+              Kontakt
+            </p>
+            <a href="https://github.com/Integer-studio">Github</a>
+            <a href="mailto:kontakt@intstudio.cz">kontakt@intstudio.cz</a>
+          </div>
         </div>
-        <div class="links font-mono">
-          <p
-            class="uppercase tracking-tight text-shadow-tertiary-700 text-sm mb-2"
-          >
-            Navigace
-          </p>
-          <a href="/">Domů</a>
-          <a href="/projects">Projekty</a>
-          <a href="/about">O Integeru</a>
-          <a href="/contact">Kontakt</a>
-        </div>
-        <div class="links font-mono">
-          <p
-            class="uppercase tracking-tight text-shadow-tertiary-700 text-sm mb-2"
-          >
-            Kontakt
-          </p>
-          <a href="https://github.com/Integer-studio">Github</a>
-          <p>tym@intstudio.cz</p>
-        </div>
-      </div>
+      </GridFrame>
     </footer>
   </body>
 
   <style is:global>
+    html {
+      scroll-behavior: smooth;
+    }
     html,
     body {
       margin: 0;
       width: 100%;
-      height: 100%;
-      color: var(--color-tertiary-900);
+      color: var(--color-ink-strong);
     }
     * {
-      border-color: var(--color-primary-500);
+      border-color: var(--color-rule);
     }
     footer .links {
       display: flex;
       flex-direction: column;
       gap: 0.2rem;
+      color: var(--color-on-dark-65);
     }
     footer .links a:hover {
       text-decoration: underline;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
     }
   </style>
 </html>
