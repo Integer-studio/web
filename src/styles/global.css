@@ -58,7 +58,17 @@
      viewport edge. The 1192px cap makes the ramp top out exactly at the Figma
      frame: at 1512 the cap binds and the gutter is 160px on the nose. */
   --gutter: 1rem;
-  --content-width: min(1192px, calc(100vw - 2 * var(--gutter)));
+  /* Rounded down to an even number of pixels. The gutter rules are a centred
+     overlay on this column, so a fractional width puts their edges mid-pixel
+     and Chromium paints each one as two half-opacity pixels — visibly softer
+     than the horizontal rules beside them, which are edge-anchored and always
+     crisp. An even width keeps both edges on a whole or half pixel, which the
+     compositor snaps. Costs at most 1px of column. */
+  --content-width: round(
+    down,
+    min(1192px, calc(100vw - 2 * var(--gutter))),
+    2px
+  );
 
   /* The padding inside the gutter rules (Figma: 64px at the frame width). */
   --frame-pad: 1rem;
