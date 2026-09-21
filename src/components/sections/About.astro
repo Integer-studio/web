@@ -5,6 +5,7 @@ import GutterRules from '../GutterRules.astro';
 import PersonCard from '../PersonCard.astro';
 import plant from '../../images/ascii/plant.svg';
 import placeholder from '../../images/team/placeholder-dithered.png';
+import oskarPortrait from '../../images/team/oskar-dithered.png';
 
 /**
  * Figma `538:118` + the loose children of `530:2`. 1371px tall at the design
@@ -17,7 +18,7 @@ import placeholder from '../../images/team/placeholder-dithered.png';
  */
 const people = [
   { name: 'Tonda', portrait: placeholder },
-  { name: 'Oskar', portrait: placeholder },
+  { name: 'Maestro kár', portrait: oskarPortrait, flashy: true },
   { name: 'Matyáš', portrait: placeholder },
 ];
 
@@ -73,7 +74,7 @@ const paragraphs = [
     <div
       class="mt-12 grid grid-cols-1 gap-[clamp(1.5rem,5vw,70px)] md:grid-cols-3 md:px-[var(--frame-pad)] frame:mt-[24px] frame:px-[52px]"
     >
-      {people.map((p) => <PersonCard name={p.name} portrait={p.portrait} />)}
+      {people.map((p) => <PersonCard name={p.name} portrait={p.portrait} flashy={p.flashy} />)}
     </div>
 
     <!-- Staggered body copy. -->
