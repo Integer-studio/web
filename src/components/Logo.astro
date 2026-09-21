@@ -1,8 +1,12 @@
+---
+/** The wordmark. On a one-pager the hover sends you back to the top. */
+---
+
 <p
-  class="inline-flex items-baseline text-3xl tracking-tighter text-primary-600 logo-container"
+  class="logo-container m-0 inline-flex items-baseline text-3xl tracking-tighter text-accent"
 >
   &#123;<span
-    class="text-tertiary-900 inline-block intlogo-wrapper overflow-hidden px-0.5 hover:italic"
+    class="intlogo-wrapper inline-block overflow-hidden px-0.5 text-paper hover:italic"
     ><span class="intlogo inline-block">integer</span></span
   >&#125;
 </p>
@@ -19,45 +23,16 @@
         const container = document.querySelector('.logo-container');
         const text = document.querySelector('.intlogo');
 
-        container?.addEventListener('mouseenter', () => {
-          const tl = gsap.timeline();
-          tl.to(text, {
-            duration: 0.2,
-            x: -20,
-            opacity: 0,
-            ease: 'power2.in',
-          })
-            .set(text, {
-              text: { value: '&#8592;domů' },
-              x: 20,
-            })
-            .to(text, {
-              duration: 0.2,
-              x: 0,
-              opacity: 1,
-              ease: 'power2.out',
-            });
-        });
+        const swap = (value: string) => {
+          gsap
+            .timeline()
+            .to(text, { duration: 0.2, x: -20, opacity: 0, ease: 'power2.in' })
+            .set(text, { text: { value }, x: 20 })
+            .to(text, { duration: 0.2, x: 0, opacity: 1, ease: 'power2.out' });
+        };
 
-        container?.addEventListener('mouseleave', () => {
-          const tl = gsap.timeline();
-          tl.to(text, {
-            duration: 0.2,
-            x: 20,
-            opacity: 0,
-            ease: 'power2.in',
-          })
-            .set(text, {
-              text: { value: 'integer' },
-              x: -20,
-            })
-            .to(text, {
-              duration: 0.2,
-              x: 0,
-              opacity: 1,
-              ease: 'power2.out',
-            });
-        });
+        container?.addEventListener('mouseenter', () => swap('&#8593;nahoru'));
+        container?.addEventListener('mouseleave', () => swap('integer'));
       }
     );
   }

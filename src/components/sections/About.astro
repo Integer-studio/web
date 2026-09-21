@@ -1,0 +1,117 @@
+---
+import GridFrame from '../GridFrame.astro';
+import Rule from '../Rule.astro';
+import GutterRules from '../GutterRules.astro';
+import PersonCard from '../PersonCard.astro';
+import plant from '../../images/ascii/plant.svg';
+import placeholder from '../../images/team/placeholder-dithered.png';
+
+/**
+ * Figma `538:118` + the loose children of `530:2`. 1371px tall at the design
+ * width.
+ *
+ * The three body paragraphs are deliberately staggered — offset left/right
+ * rather than set in a row. That stagger is the point of the section, so it is
+ * reproduced exactly from `xl` and only collapses to a stacked column below
+ * `lg`, where there is no room for it.
+ */
+const people = [
+  { name: 'Tonda', portrait: placeholder },
+  { name: 'Oskar', portrait: placeholder },
+  { name: 'Matyáš', portrait: placeholder },
+];
+
+/* Figma x/y of each paragraph, relative to the 1192 content column and to the
+   top of the first paragraph. `left` is also carried as a share of that column
+   so the stagger survives below the frame width, where the absolute positions
+   do not fit but the offset is still the point of the section. */
+const paragraphs = [
+  {
+    left: 154,
+    top: 0,
+    text: 'Jsme tři studenti Smíchovské střední průmyslové školy (SSPŠ) a Integer Studio děláme zhruba rok vedle školy. Sídlíme u softwarového domu Jetsoft, se kterým dlouhodobě spolupracujeme.',
+  },
+  {
+    left: 335,
+    top: 204,
+    text: 'Nejsme agentura. Bereme si radši míň projektů a věnujeme se jim naplno. Než začneme stavět, chceme rozumět tomu, jak firma reálně pracuje — teprve podle toho aplikaci navrhujeme.',
+  },
+  {
+    left: 154,
+    top: 388,
+    text: 'TenderPortal běží v reálném provozu, s Jetsoftem spolupracujeme dlouhodobě a na hackathonu ARCHA+ jsme za víkend postavili návrh i funkční MVP a vzali první místo.',
+  },
+];
+---
+
+<section
+  id="o-nas"
+  class="relative scroll-mt-12 overflow-hidden bg-ink py-[var(--section-pad)] frame:h-[1371px] frame:py-0"
+>
+  <!-- The hero's plant again, rotated. Sits behind the paragraphs. -->
+  <img
+    src={plant.src}
+    alt=""
+    aria-hidden="true"
+    width={plant.width}
+    height={plant.height}
+    class="pointer-events-none absolute top-[45%] -right-32 w-[520px] max-w-none rotate-[-120deg] opacity-20 lg:top-[600px] lg:right-[-60px] lg:w-[819px] lg:opacity-66"
+  />
+
+  <Rule />
+
+  <GutterRules />
+
+  <GridFrame class="relative z-10 frame:h-full">
+    <h2
+      class="text-center text-[clamp(2rem,6vw,4rem)] leading-[0.94] font-semibold tracking-[0.02em] text-paper frame:pt-[var(--section-pad)]"
+    >
+      O nás
+    </h2>
+
+    <!-- Person cards. 3 × 316 with 70px gaps inside the 1192 column. -->
+    <div
+      class="mt-12 grid grid-cols-1 gap-[clamp(1.5rem,5vw,70px)] md:grid-cols-3 md:px-[var(--frame-pad)] frame:mt-[24px] frame:px-[52px]"
+    >
+      {people.map((p) => <PersonCard name={p.name} portrait={p.portrait} />)}
+    </div>
+
+    <!-- Staggered body copy. -->
+    <div
+      class="mt-16 flex flex-col gap-10 md:px-[var(--frame-pad)] frame:relative frame:mt-[49px] frame:block frame:h-[634px] frame:px-0"
+    >
+      {
+        paragraphs.map((p) => (
+          <p
+            class="stagger text-[15px] leading-[1.5] font-light tracking-[0.02em] text-on-dark"
+            style={`--l:${p.left}px;--t:${p.top}px;--lp:${((p.left / 1192) * 100).toFixed(3)}%`}
+          >
+            {p.text}
+          </p>
+        ))
+      }
+    </div>
+  </GridFrame>
+</section>
+
+<style>
+  /* The stagger is fluid from `md`: a narrow measure indented by the same share
+     of the column each paragraph has in Figma. At the frame width it snaps to
+     the exact absolute positions. */
+  @media (width >= 48rem) {
+    .stagger {
+      width: clamp(12rem, 22%, 251px);
+      margin-left: var(--lp);
+    }
+  }
+
+  @media (width >= 1512px) {
+    .stagger {
+      position: absolute;
+      width: 251px;
+      margin-left: 0;
+      left: var(--l);
+      top: var(--t);
+    }
+  }
+</style>

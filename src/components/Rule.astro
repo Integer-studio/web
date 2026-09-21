@@ -1,0 +1,36 @@
+---
+/**
+ * The full-bleed horizontal accent rule pair that each dark section carries,
+ * inset from its own top and bottom edge.
+ *
+ * Figma insets drift (32px in the hero, 45.25/39.14px in About and the footer);
+ * that is duplication drift, not intent, so one `--rule-inset` is used
+ * everywhere. Must be placed inside a `relative` section.
+ *
+ * The vertical gutter rules are not here — they live in GridFrame, because
+ * their offsets are responsive and tied to the container's own padding.
+ */
+interface Props {
+  /** Render only one of the pair. */
+  only?: 'top' | 'bottom';
+}
+
+const { only } = Astro.props;
+---
+
+{
+  only !== 'bottom' && (
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 top-[var(--rule-inset)] h-px bg-rule"
+    />
+  )
+}
+{
+  only !== 'top' && (
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-x-0 bottom-[var(--rule-inset)] h-px bg-rule"
+    />
+  )
+}

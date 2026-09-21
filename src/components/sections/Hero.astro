@@ -1,0 +1,56 @@
+---
+import GridFrame from '../GridFrame.astro';
+import Rule from '../Rule.astro';
+import GutterRules from '../GutterRules.astro';
+import plant from '../../images/ascii/plant.svg';
+
+/**
+ * Figma `530:5`. Full-bleed ink, 874px tall at the design width.
+ *
+ * Geometry note: the Figma content frame sits at x=160 (the gutter rule) and
+ * carries 32px of padding, and the text frame inside it adds another 32px — so
+ * the copy starts 64px in from the rule, which is the same x=224 the featured
+ * project card uses. That 64px is `frame:pl-16` below.
+ */
+---
+
+<section
+  id="top"
+  class="relative flex min-h-[calc(90svh-3rem)] flex-col justify-center overflow-hidden bg-ink frame:h-[min(874px,calc(90svh-3rem))] frame:min-h-0 frame:justify-start"
+>
+  <!-- ASCII plant. Backdrop on small screens, part of the composition from lg. -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 overflow-hidden"
+  >
+    <img
+      src={plant.src}
+      alt=""
+      width={plant.width}
+      height={plant.height}
+      class="absolute -top-8 -right-40 h-[58%] w-auto max-w-none opacity-20 sm:-right-32 sm:h-[75%] sm:opacity-25 lg:top-[-45px] lg:right-[-40px] lg:h-[823px] lg:opacity-66 frame:right-auto frame:left-[calc(50%-596px+495px)]"
+    />
+  </div>
+
+  <!-- Bottom only: the fixed navbar's bottom border is the hero's top rule. -->
+  <Rule only="bottom" />
+
+  <GutterRules />
+
+  <GridFrame class="relative z-10 frame:h-full">
+    <div class="md:pl-[var(--frame-pad)] frame:pt-[294px]">
+      <h1
+        class="max-w-[580px] font-serif text-[clamp(2.5rem,9vw,5.25rem)] leading-[0.95] tracking-[0.004em] text-balance text-on-dark frame:leading-[0.93]"
+      >
+        Stavíme interní aplikace <span class="text-accent italic">na míru</span>
+      </h1>
+
+      <p
+        class="mt-8 max-w-[443px] text-[clamp(1.0625rem,2vw,1.5rem)] leading-[1.35] font-light tracking-[-0.01em] text-on-dark-muted frame:mt-[42px]"
+      >
+        Jsme Integer Studio, malý tým který vytváří webové aplikace pro firmy
+        dělané na míru jejich procesům.
+      </p>
+    </div>
+  </GridFrame>
+</section>

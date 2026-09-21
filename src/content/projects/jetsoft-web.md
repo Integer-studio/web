@@ -1,10 +1,9 @@
 ---
-layout: ../../layouts/ProjectLayout.astro
 name: JetSoft.cz web
-image: /src/images/projects/Jetsoft-web.png
-description: "Web firmy JetSoft není jen jednuduchý statický web. Naopak obsahuje dynamické prvky jako: vyhledávání, list produktů, novinky a stahování programů."
+image: ../../images/projects/Jetsoft-web.png
+description: Web firmy JetSoft není jen statická prezentace — má vyhledávání, list produktů, novinky i stahování programů.
 tags: [webová stránka, Next.js]
-year: "2026"
+year: '2026'
 priority: 10
-featured: true
+featured: false
 ---

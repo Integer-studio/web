@@ -1,0 +1,213 @@
+---
+import { Copy } from '@lucide/astro';
+import GridFrame from '../GridFrame.astro';
+import GlyphTexture from '../GlyphTexture.astro';
+
+/**
+ * Figma `546:132` / `546:133` / `546:134`. Light section, no panel.
+ *
+ * The email is *not* a mailto: link — it is click-to-copy, ported wholesale
+ * from the old ContactPage/ContactDirect.astro. The whole accent rectangle is
+ * the hit area, and unlike the original it is keyboard-operable.
+ *
+ * In Figma the button and the email text box are ~25px right of the frame
+ * midpoint while the headline is centred; that is sloppiness, not intent, so
+ * both are centred on the page here.
+ */
+const EMAIL = 'kontakt@intstudio.cz';
+---
+
+<section
+  id="kontakt"
+  class="relative scroll-mt-12 overflow-hidden bg-paper py-[var(--section-pad)]"
+>
+  <GlyphTexture seed={0x2b17} />
+
+  <GridFrame class="relative z-10 md:px-[var(--frame-pad)]">
+    <h2
+      class="text-center text-[clamp(1.25rem,3vw,2.5rem)] leading-tight tracking-[0.02em] text-ink-strong"
+    >
+      Zaujali jsme vás? Napište.
+    </h2>
+
+    <div class="mt-10 flex items-center justify-center gap-3 frame:mt-[52px]">
+      <button
+        id="email-copy"
+        type="button"
+        data-email={EMAIL}
+        class="flex min-h-[88px] w-full max-w-[837px] cursor-pointer items-center justify-center rounded-xl bg-accent px-6 py-4 font-serif text-[clamp(1.375rem,6.4vw,6rem)] leading-none tracking-[0.02em] break-all text-ink-raised focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink frame:h-[149px] frame:min-h-0 frame:break-normal"
+      >
+        {EMAIL}
+      </button>
+
+      <button
+        id="email-copy-mobile"
+        type="button"
+        aria-label="Kopírovat e-mailovou adresu"
+        class="shrink-0 cursor-pointer p-2 text-ink-strong md:hidden"
+      >
+        <Copy class="h-6 w-6" />
+      </button>
+    </div>
+  </GridFrame>
+
+  <input
+    type="text"
+    id="hidden-email-input"
+    value={EMAIL}
+    readonly
+    tabindex="-1"
+    aria-hidden="true"
+    class="pointer-events-none absolute -left-[9999px] opacity-0"
+  />
+
+  <p id="copy-status" role="status" aria-live="polite" class="sr-only"></p>
+
+  <div
+    id="copy-cursor"
+    aria-hidden="true"
+    class="pointer-events-none fixed z-50 hidden border border-rule bg-ink px-4 py-2 font-medium whitespace-nowrap text-paper md:block"
+    style="left: 0; top: 0;"
+  >
+    kopírovat
+  </div>
+</section>
+
+<script>
+  const emailButton = document.querySelector<HTMLButtonElement>('#email-copy');
+  const mobileButton =
+    document.querySelector<HTMLButtonElement>('#email-copy-mobile');
+  const hiddenInput = document.querySelector<HTMLInputElement>(
+    '#hidden-email-input'
+  );
+
+  const CHECK =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M20 6 9 17l-5-5"/></svg>';
+
+  const status = document.querySelector<HTMLElement>('#copy-status');
+  const email = emailButton?.dataset.email ?? '';
+
+  /* execCommand over an off-screen input is the fallback for older mobile
+     browsers that have no clipboard API. */
+  function legacyCopy() {
+    if (!hiddenInput) return false;
+    hiddenInput.style.position = 'fixed';
+    hiddenInput.style.left = '0';
+    hiddenInput.focus();
+    hiddenInput.select();
+    hiddenInput.setSelectionRange(0, 99999);
+    try {
+      return document.execCommand('copy');
+    } finally {
+      hiddenInput.style.position = '';
+      hiddenInput.style.left = '';
+      hiddenInput.blur();
+    }
+  }
+
+  async function copyEmail() {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(email);
+      ok = true;
+    } catch {
+      ok = legacyCopy();
+    }
+    if (status) {
+      status.textContent = ok
+        ? 'E-mailová adresa zkopírována do schránky.'
+        : 'Adresu se nepodařilo zkopírovat.';
+    }
+    return ok;
+  }
+
+  /* The accent button copies on click *and* on Enter/Space, at every width —
+     the original implementation was mouse and touch only. */
+  emailButton?.addEventListener('click', copyEmail);
+
+  mobileButton?.addEventListener('click', async () => {
+    if (await copyEmail()) mobileButton.innerHTML = CHECK;
+  });
+
+  /* Desktop only: GSAP is dynamically imported so mobile never downloads it. */
+  if (window.matchMedia('(min-width: 768px)').matches) {
+    import('gsap').then(({ gsap }) => {
+      const copyCursor = document.querySelector<HTMLElement>('#copy-cursor');
+      if (!emailButton || !copyCursor) return;
+
+      let isHovering = false;
+
+      gsap.set(copyCursor, {
+        xPercent: 0,
+        yPercent: 0,
+        opacity: 0,
+        scale: 0.8,
+      });
+
+      const xTo = gsap.quickTo(copyCursor, 'x', {
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+      const yTo = gsap.quickTo(copyCursor, 'y', {
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!isHovering) return;
+        xTo(e.clientX);
+        yTo(e.clientY);
+      };
+
+      const handleMouseEnter = (e: MouseEvent) => {
+        isHovering = true;
+        gsap.set(copyCursor, { x: e.clientX, y: e.clientY });
+        gsap.to(copyCursor, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.3,
+          ease: 'back.out(1.7)',
+        });
+      };
+
+      const handleMouseLeave = () => {
+        isHovering = false;
+        gsap
+          .timeline()
+          .to(copyCursor, {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.2,
+            ease: 'power2.in',
+          })
+          .to(copyCursor, { innerHTML: 'kopírovat', duration: 0 });
+      };
+
+      /* Copying itself is bound above; this only drives the floating label. */
+      const handleClick = () => {
+        gsap
+          .timeline()
+          .to(copyCursor, {
+            innerHTML: 'máte ho ve schránce!',
+            scale: 1.1,
+            duration: 0.2,
+            ease: 'back.out(2)',
+          })
+          .to(copyCursor, { scale: 1, duration: 0.2, ease: 'power2.out' });
+      };
+
+      emailButton.addEventListener('mouseenter', handleMouseEnter);
+      emailButton.addEventListener('mouseleave', handleMouseLeave);
+      emailButton.addEventListener('mousemove', handleMouseMove);
+      emailButton.addEventListener('click', handleClick);
+
+      /* View-transition safety. */
+      document.addEventListener('astro:before-swap', () => {
+        emailButton.removeEventListener('mouseenter', handleMouseEnter);
+        emailButton.removeEventListener('mouseleave', handleMouseLeave);
+        emailButton.removeEventListener('mousemove', handleMouseMove);
+        emailButton.removeEventListener('click', handleClick);
+      });
+    });
+  }
+</script>

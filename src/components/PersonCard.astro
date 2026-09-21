@@ -1,0 +1,72 @@
+---
+import type { ImageMetadata } from 'astro';
+
+/**
+ * Figma component `536:70` — 316 × 488.
+ *
+ * The card has no radius and no border: its shape is defined entirely by five
+ * accent rules, and all five paint *on top of* the portrait, so the two
+ * verticals cross the image. Offsets are expressed as percentages of the
+ * Figma box so the whole card scales as one piece at any column width:
+ *
+ *   verticals   x=30 and x=282  ->  9.494% from the left, 10.759% from the right
+ *   horizontals y=32 and y=456  ->  6.557% from the top and bottom
+ *   name band   y=382..456      ->  6.557%..21.721% from the bottom
+ *   portrait    252 x 350       ->  spans the verticals, 71.721% tall
+ */
+interface Props {
+  name: string;
+  portrait: ImageMetadata;
+}
+
+const { name, portrait } = Astro.props;
+
+const L = '9.494%'; /* 30/316  */
+const R = '10.759%'; /* 34/316  */
+const T = '6.557%'; /* 32/488  */
+const BAND = '21.721%'; /* 106/488 */
+---
+
+<article class="relative aspect-[316/488] w-full bg-ink-raised">
+  <div
+    class="absolute h-[71.721%] overflow-hidden"
+    style={`left:${L};right:${R};top:${T}`}
+  >
+    <img
+      src={portrait.src}
+      alt={name}
+      width={portrait.width}
+      height={portrait.height}
+      class="h-full w-full object-cover"
+    />
+  </div>
+
+  <!-- Rules. Decorative, and deliberately above the portrait. -->
+  <span
+    aria-hidden="true"
+    class="absolute inset-x-0 h-px bg-rule"
+    style={`top:${T}`}></span>
+  <span
+    aria-hidden="true"
+    class="absolute inset-x-0 h-px bg-rule"
+    style={`bottom:${T}`}></span>
+  <span
+    aria-hidden="true"
+    class="absolute h-px bg-rule"
+    style={`left:${L};right:${R};bottom:${BAND}`}></span>
+  <span
+    aria-hidden="true"
+    class="absolute inset-y-0 w-px bg-rule"
+    style={`left:${L}`}></span>
+  <span
+    aria-hidden="true"
+    class="absolute inset-y-0 w-px bg-rule"
+    style={`right:${R}`}></span>
+
+  <h3
+    class="absolute flex items-center justify-center font-serif text-[clamp(1.5rem,3.5vw,3rem)] leading-none tracking-[0.02em] text-on-dark"
+    style={`left:${L};right:${R};bottom:${T};height:calc(${BAND} - ${T})`}
+  >
+    {name}
+  </h3>
+</article>
