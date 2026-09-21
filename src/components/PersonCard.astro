@@ -18,9 +18,13 @@ interface Props {
   name: string;
   portrait: ImageMetadata;
   flashy?: boolean;
+  /** Show the whole portrait uncropped instead of the usual object-cover
+   *  box. The card's height then follows the image, so it will no longer
+   *  line up with the other (fixed 316x488) cards in the row. */
+  fullImage?: boolean;
 }
 
-const { name, portrait, flashy = false } = Astro.props;
+const { name, portrait, flashy = false, fullImage = false } = Astro.props;
 
 const L = '9.494%'; /* 30/316  */
 const R = '10.759%'; /* 34/316  */
@@ -28,19 +32,32 @@ const T = '6.557%'; /* 32/488  */
 const BAND = '21.721%'; /* 106/488 */
 ---
 
-<article class="relative aspect-[316/488] w-full bg-ink-raised">
-  <div
-    class="absolute h-[71.721%] overflow-hidden"
-    style={`left:${L};right:${R};top:${T}`}
-  >
-    <img
-      src={portrait.src}
-      alt={name}
-      width={portrait.width}
-      height={portrait.height}
-      class="h-full w-full object-cover"
-    />
-  </div>
+<article
+  class={`relative w-full bg-ink-raised ${fullImage ? '' : 'aspect-[316/488]'} ${flashy ? 'card-flashy' : ''}`}
+>
+  {
+    fullImage ? (
+      <div class="w-full" style={`padding-left:${L};padding-right:${R};padding-top:${T}`}>
+        <img
+          src={portrait.src}
+          alt={name}
+          width={portrait.width}
+          height={portrait.height}
+          class="w-full h-auto object-contain"
+        />
+      </div>
+    ) : (
+      <div class="absolute h-[71.721%] overflow-hidden" style={`left:${L};right:${R};top:${T}`}>
+        <img
+          src={portrait.src}
+          alt={name}
+          width={portrait.width}
+          height={portrait.height}
+          class="h-full w-full object-cover"
+        />
+      </div>
+    )
+  }
 
   <!-- Rules. Decorative, and deliberately above the portrait. -->
   <span
@@ -68,23 +85,53 @@ const BAND = '21.721%'; /* 106/488 */
     class={`absolute flex items-center justify-center font-serif text-[clamp(1.5rem,3.5vw,3rem)] leading-none tracking-[0.02em] text-on-dark ${flashy ? 'name-flashy' : ''}`}
     style={`left:${L};right:${R};bottom:${T};height:calc(${BAND} - ${T})`}
   >
-    <span class={flashy ? 'name-flashy-inner' : ''}>{name}</span>
+    {
+      flashy ? (
+        <span class="name-flashy-inner">
+          <span class="name-default">{name}</span>
+          <span class="name-hover" aria-hidden="true">
+            Maestro kár
+          </span>
+        </span>
+      ) : (
+        <span>{name}</span>
+      )
+    }
   </h3>
 </article>
 
 <style>
   /* Only ever applied when a card is passed `flashy` — an over-the-top joke
-     hover for one specific name, left inert (unused CSS) for everyone else. */
+     hover for one specific name, left inert (unused CSS) for everyone else.
+     The trigger sits on the whole card (`.card-flashy`), not just the name,
+     so hovering the portrait fires it too. */
   .name-flashy {
     overflow: visible;
   }
 
   .name-flashy-inner {
+    position: relative;
     display: inline-block;
     transform-origin: 50% 50%;
   }
 
-  .name-flashy:hover .name-flashy-inner {
+  .name-hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .card-flashy:hover .name-default {
+    opacity: 0;
+  }
+
+  .card-flashy:hover .name-hover {
+    opacity: 1;
     animation: name-flashy-spin 0.6s ease-in-out infinite;
   }
 
