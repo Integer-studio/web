@@ -18,7 +18,7 @@ import oskarPortrait from '../../images/team/oskar-dithered.png';
  */
 const people = [
   { name: 'Tonda', portrait: placeholder },
-  { name: 'Maestro kár', portrait: oskarPortrait, flashy: true },
+  { name: 'Oskar', portrait: oskarPortrait, flashy: true, fullImage: true },
   { name: 'Matyáš', portrait: placeholder },
 ];
 
@@ -74,7 +74,11 @@ const paragraphs = [
     <div
       class="mt-12 grid grid-cols-1 gap-[clamp(1.5rem,5vw,70px)] md:grid-cols-3 md:px-[var(--frame-pad)] frame:mt-[24px] frame:px-[52px]"
     >
-      {people.map((p) => <PersonCard name={p.name} portrait={p.portrait} flashy={p.flashy} />)}
+      {
+        people.map((p) => (
+          <PersonCard name={p.name} portrait={p.portrait} flashy={p.flashy} fullImage={p.fullImage} />
+        ))
+      }
     </div>
 
     <!-- Staggered body copy. -->
