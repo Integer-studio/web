@@ -1,5 +1,4 @@
 ---
-import { Copy } from '@lucide/astro';
 import GridFrame from '../GridFrame.astro';
 import GlyphTexture from '../GlyphTexture.astro';
 
@@ -9,6 +8,10 @@ import GlyphTexture from '../GlyphTexture.astro';
  * The email is *not* a mailto: link — it is click-to-copy, ported wholesale
  * from the old ContactPage/ContactDirect.astro. The whole accent rectangle is
  * the hit area, and unlike the original it is keyboard-operable.
+ *
+ * Success is confirmed exactly once: by the floating label when it is on
+ * screen (desktop mouse), otherwise inside the button itself — touch and
+ * keyboard users never see the label, so it cannot be the only feedback.
  *
  * In Figma the button and the email text box are ~25px right of the frame
  * midpoint while the headline is centred; that is sloppiness, not intent, so
@@ -30,23 +33,15 @@ const EMAIL = 'kontakt@intstudio.cz';
       Zaujali jsme vás? Napište.
     </h2>
 
-    <div class="mt-10 flex items-center justify-center gap-3 frame:mt-[52px]">
+    <div class="mt-10 flex justify-center frame:mt-[52px]">
       <button
         id="email-copy"
         type="button"
         data-email={EMAIL}
-        class="flex min-h-[88px] w-full max-w-[837px] cursor-pointer items-center justify-center rounded-xl bg-accent px-6 py-4 font-serif text-[clamp(1.375rem,6.4vw,6rem)] leading-none tracking-[0.02em] break-all text-ink-raised focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink frame:h-[149px] frame:min-h-0 frame:break-normal"
+        aria-label={`Kopírovat e-mailovou adresu ${EMAIL}`}
+        class="flex min-h-[88px] w-full max-w-[837px] cursor-pointer items-center justify-center rounded-xl bg-accent px-6 py-4 font-serif text-[clamp(1.375rem,6.4vw,6rem)] leading-none tracking-[0.02em] [overflow-wrap:anywhere] text-ink-raised focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink frame:h-[149px] frame:min-h-0"
       >
-        {EMAIL}
-      </button>
-
-      <button
-        id="email-copy-mobile"
-        type="button"
-        aria-label="Kopírovat e-mailovou adresu"
-        class="shrink-0 cursor-pointer p-2 text-ink-strong md:hidden"
-      >
-        <Copy class="h-6 w-6" />
+        <span id="email-copy-label">{EMAIL}</span>
       </button>
     </div>
   </GridFrame>
@@ -63,11 +58,12 @@ const EMAIL = 'kontakt@intstudio.cz';
 
   <p id="copy-status" role="status" aria-live="polite" class="sr-only"></p>
 
+  <!-- Invisible until the script fades it in, so it can never flash at 0,0
+       before GSAP loads or on a device that never loads GSAP at all. -->
   <div
     id="copy-cursor"
     aria-hidden="true"
-    class="pointer-events-none fixed z-50 hidden border border-rule bg-ink px-4 py-2 font-medium whitespace-nowrap text-paper md:block"
-    style="left: 0; top: 0;"
+    class="pointer-events-none fixed top-0 left-0 z-50 border border-rule bg-ink px-4 py-2 font-medium whitespace-nowrap text-paper opacity-0"
   >
     kopírovat
   </div>
@@ -75,17 +71,15 @@ const EMAIL = 'kontakt@intstudio.cz';
 
 <script>
   const emailButton = document.querySelector<HTMLButtonElement>('#email-copy');
-  const mobileButton =
-    document.querySelector<HTMLButtonElement>('#email-copy-mobile');
+  const label = document.querySelector<HTMLElement>('#email-copy-label');
   const hiddenInput = document.querySelector<HTMLInputElement>(
     '#hidden-email-input'
   );
-
-  const CHECK =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6"><path d="M20 6 9 17l-5-5"/></svg>';
-
   const status = document.querySelector<HTMLElement>('#copy-status');
   const email = emailButton?.dataset.email ?? '';
+
+  const CHECK =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ml-[0.2em] inline-block h-[0.7em] w-[0.7em]"><path d="M20 6 9 17l-5-5"/></svg>';
 
   /* execCommand over an off-screen input is the fallback for older mobile
      browsers that have no clipboard API. */
@@ -102,6 +96,7 @@ const EMAIL = 'kontakt@intstudio.cz';
       hiddenInput.style.position = '';
       hiddenInput.style.left = '';
       hiddenInput.blur();
+      emailButton?.focus();
     }
   }
 
@@ -121,28 +116,35 @@ const EMAIL = 'kontakt@intstudio.cz';
     return ok;
   }
 
+  /* True while the floating label is on screen; set by the GSAP block. */
+  let badgeVisible = false;
+
+  /* The confirmation replaces the address for a moment, then puts it back. */
+  let resetTimer: number | undefined;
+  function confirmInButton() {
+    if (!label) return;
+    label.innerHTML = `Zkopírováno${CHECK}`;
+    window.clearTimeout(resetTimer);
+    resetTimer = window.setTimeout(() => {
+      label.textContent = email;
+    }, 1800);
+  }
+
   /* The accent button copies on click *and* on Enter/Space, at every width —
      the original implementation was mouse and touch only. */
-  emailButton?.addEventListener('click', copyEmail);
-
-  mobileButton?.addEventListener('click', async () => {
-    if (await copyEmail()) mobileButton.innerHTML = CHECK;
+  emailButton?.addEventListener('click', async () => {
+    if ((await copyEmail()) && !badgeVisible) confirmInButton();
   });
 
-  /* Desktop only: GSAP is dynamically imported so mobile never downloads it. */
-  if (window.matchMedia('(min-width: 768px)').matches) {
+  /* The floating label needs a real hovering pointer. A width check let tablets
+     through, where a tap fires mouseenter and the label then never leaves. GSAP
+     is dynamically imported so no other device downloads it. */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     import('gsap').then(({ gsap }) => {
       const copyCursor = document.querySelector<HTMLElement>('#copy-cursor');
       if (!emailButton || !copyCursor) return;
 
-      let isHovering = false;
-
-      gsap.set(copyCursor, {
-        xPercent: 0,
-        yPercent: 0,
-        opacity: 0,
-        scale: 0.8,
-      });
+      gsap.set(copyCursor, { opacity: 0, scale: 0.8 });
 
       const xTo = gsap.quickTo(copyCursor, 'x', {
         duration: 0.3,
@@ -153,16 +155,37 @@ const EMAIL = 'kontakt@intstudio.cz';
         ease: 'power2.out',
       });
 
-      const handleMouseMove = (e: MouseEvent) => {
-        if (!isHovering) return;
-        xTo(e.clientX);
-        yTo(e.clientY);
+      /* Last known pointer position, in viewport coordinates. A scroll moves the
+         button, not the pointer, so this stays valid until the next move. */
+      const pointer = { x: -1, y: -1 };
+
+      /* Whether the label belongs on screen is decided from geometry, not from
+         which events happened to fire: mouseenter/mouseleave are unreliable
+         during a scroll (some browsers skip them until the mouse moves, others
+         send synthetic ones hit-tested against the pre-scroll layout). */
+      const pointerInside = () => {
+        const r = emailButton.getBoundingClientRect();
+        return (
+          pointer.x >= r.left &&
+          pointer.x <= r.right &&
+          pointer.y >= r.top &&
+          pointer.y <= r.bottom
+        );
       };
 
-      const handleMouseEnter = (e: MouseEvent) => {
-        isHovering = true;
+      /* Exactly one fade runs at a time. Without this, leaving within 0.3s of
+         entering let the slower fade-in outlive the fade-out and finish at
+         full opacity — the label stuck on screen after a fast scroll. */
+      let fade: gsap.core.Animation | undefined;
+
+      const show = (e: MouseEvent) => {
+        pointer.x = e.clientX;
+        pointer.y = e.clientY;
+        if (badgeVisible || !pointerInside()) return;
+        badgeVisible = true;
+        fade?.kill();
         gsap.set(copyCursor, { x: e.clientX, y: e.clientY });
-        gsap.to(copyCursor, {
+        fade = gsap.to(copyCursor, {
           opacity: 1,
           scale: 1,
           duration: 0.3,
@@ -170,9 +193,11 @@ const EMAIL = 'kontakt@intstudio.cz';
         });
       };
 
-      const handleMouseLeave = () => {
-        isHovering = false;
-        gsap
+      const hide = () => {
+        if (!badgeVisible) return;
+        badgeVisible = false;
+        fade?.kill();
+        fade = gsap
           .timeline()
           .to(copyCursor, {
             opacity: 0,
@@ -180,11 +205,29 @@ const EMAIL = 'kontakt@intstudio.cz';
             duration: 0.2,
             ease: 'power2.in',
           })
-          .to(copyCursor, { innerHTML: 'kopírovat', duration: 0 });
+          .set(copyCursor, { innerHTML: 'kopírovat' });
+      };
+
+      /* After a scroll hid the label, the next move over the button brings it
+         back, since no fresh mouseenter fires for a pointer already inside. */
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!badgeVisible) return show(e);
+        pointer.x = e.clientX;
+        pointer.y = e.clientY;
+        xTo(e.clientX);
+        yTo(e.clientY);
+      };
+
+      /* The label is `fixed` at the pointer's viewport position, so a scroll
+         or resize can carry the button out from under it. Re-checked on every
+         frame that moves the layout, so the last one always wins. */
+      const handleScroll = () => {
+        if (badgeVisible && !pointerInside()) hide();
       };
 
       /* Copying itself is bound above; this only drives the floating label. */
       const handleClick = () => {
+        if (!badgeVisible) return;
         gsap
           .timeline()
           .to(copyCursor, {
@@ -196,17 +239,23 @@ const EMAIL = 'kontakt@intstudio.cz';
           .to(copyCursor, { scale: 1, duration: 0.2, ease: 'power2.out' });
       };
 
-      emailButton.addEventListener('mouseenter', handleMouseEnter);
-      emailButton.addEventListener('mouseleave', handleMouseLeave);
+      emailButton.addEventListener('mouseenter', show);
+      emailButton.addEventListener('mouseleave', hide);
       emailButton.addEventListener('mousemove', handleMouseMove);
       emailButton.addEventListener('click', handleClick);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      window.addEventListener('scrollend', handleScroll);
+      window.addEventListener('resize', handleScroll);
 
       /* View-transition safety. */
       document.addEventListener('astro:before-swap', () => {
-        emailButton.removeEventListener('mouseenter', handleMouseEnter);
-        emailButton.removeEventListener('mouseleave', handleMouseLeave);
+        emailButton.removeEventListener('mouseenter', show);
+        emailButton.removeEventListener('mouseleave', hide);
         emailButton.removeEventListener('mousemove', handleMouseMove);
         emailButton.removeEventListener('click', handleClick);
+        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('scrollend', handleScroll);
+        window.removeEventListener('resize', handleScroll);
       });
     });
   }
