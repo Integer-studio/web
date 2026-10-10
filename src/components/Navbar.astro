@@ -14,8 +14,9 @@ import GridFrame from './GridFrame.astro';
 
     <button
       id="menu-toggle"
-      class="z-50 h-8 w-8 text-paper md:hidden flex flex-col justify-center items-center gap-1.5 focus:outline-none"
-      aria-label="Toggle menu"
+      class="z-50 flex h-8 w-8 flex-col items-center justify-center gap-1.5 text-paper focus-visible:outline-2 focus-visible:outline-accent md:hidden"
+      aria-label="Otevřít menu"
+      aria-controls="menu"
       aria-expanded="false"
     >
       <Menu />
@@ -52,27 +53,37 @@ import GridFrame from './GridFrame.astro';
 <script>
   const menuToggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('menu');
+  const desktop = window.matchMedia('(min-width: 768px)');
 
   if (menuToggle && menu) {
-    // Toggle menu function
+    /* Closed, the mobile menu is only translated off-screen, so it has to be
+       made inert as well — otherwise Tab and screen readers still reach the
+       links. On desktop the same element is the inline nav and stays live. */
     const toggleMenu = (open: boolean) => {
-      if (open) {
-        menuToggle.classList.add('menu-open');
-        menuToggle.setAttribute('aria-expanded', 'true');
-        menu.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden';
-      } else {
-        menuToggle.classList.remove('menu-open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        menu.classList.add('translate-x-full');
-        document.body.style.overflow = '';
-      }
+      menuToggle.classList.toggle('menu-open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute(
+        'aria-label',
+        open ? 'Zavřít menu' : 'Otevřít menu'
+      );
+      menu.classList.toggle('translate-x-full', !open);
+      menu.inert = !open && !desktop.matches;
+      document.body.style.overflow = open ? 'hidden' : '';
     };
+
+    toggleMenu(false);
 
     // Click toggle
     menuToggle.addEventListener('click', () => {
       const isOpen = menuToggle.classList.contains('menu-open');
       toggleMenu(!isOpen);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menuToggle.classList.contains('menu-open')) {
+        toggleMenu(false);
+        menuToggle.focus();
+      }
     });
 
     // Touch swipe handling
@@ -144,11 +155,7 @@ import GridFrame from './GridFrame.astro';
       });
     });
 
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) {
-        toggleMenu(false);
-      }
-    });
+    // Crossing the breakpoint either way resets the menu and its inert state.
+    desktop.addEventListener('change', () => toggleMenu(false));
   }
 </script>

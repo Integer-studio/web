@@ -49,14 +49,16 @@ const paragraphs = [
   id="o-nas"
   class="relative scroll-mt-12 overflow-hidden bg-ink py-[var(--section-pad)] frame:h-[1371px] frame:py-0"
 >
-  <!-- The hero's plant again, rotated. Sits behind the paragraphs. -->
+  <!-- The hero's plant again, rotated. Sits behind the paragraphs. Full
+       strength only at the frame width: narrower, the stagger slides right
+       under it and the copy becomes hard to read. -->
   <img
     src={plant.src}
     alt=""
     aria-hidden="true"
     width={plant.width}
     height={plant.height}
-    class="pointer-events-none absolute top-[45%] -right-32 w-[520px] max-w-none rotate-[-120deg] opacity-20 lg:top-[600px] lg:right-[-60px] lg:w-[819px] lg:opacity-66"
+    class="pointer-events-none absolute top-[45%] -right-32 w-[520px] max-w-none rotate-[-120deg] opacity-20 lg:top-[600px] lg:right-[-60px] lg:w-[819px] frame:opacity-66"
   />
 
   <Rule />

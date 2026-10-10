@@ -44,7 +44,7 @@ const navigation = [
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#20211f" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -92,16 +92,18 @@ const navigation = [
         <div
           class="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-4 md:px-[var(--frame-pad)]"
         >
-          <div>
-            <p class="mb-4 text-4xl tracking-tighter text-accent">
+          <div class="md:col-span-2">
+            <p
+              class="mb-4 text-4xl tracking-tighter whitespace-nowrap text-accent"
+            >
               &#123;<span class="px-0.5 text-paper">integer studio</span>&#125;
             </p>
             <p class="text-sm text-on-dark-65">
-              &COPY; Integer studio 2025. Všechna práva vyhrazena.
+              &COPY; Integer studio {new Date().getFullYear()}. Všechna práva
+              vyhrazena.
             </p>
           </div>
 
-          <!-- Column 2 is deliberately empty. -->
           <div class="links md:col-start-3">
             <p class="mb-2 text-sm tracking-tight text-paper uppercase">
               Navigace
