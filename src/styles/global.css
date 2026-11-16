@@ -10,6 +10,25 @@
   unicode-range: U+0020-007E;
 }
 
+/* Integer Pixel Serif: Instrument Serif rasterised to a 40-cells-per-em grid
+   with clean stepped edges, built by scripts/pixel-font.mjs (OFL 1.1). Every
+   `font-serif` on the site uses it; Instrument Serif stays as the fallback. */
+@font-face {
+  font-family: 'Integer Pixel Serif';
+  font-display: swap;
+  src: url('/fonts/IntegerPixelSerif-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Integer Pixel Serif';
+  font-display: swap;
+  src: url('/fonts/IntegerPixelSerif-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
 @theme {
   /* Accent — the single Figma variable. CTA fill, hero accent word, logo. */
   --color-accent: #80ef80;
@@ -36,7 +55,8 @@
   --font-sans:
     'Host Grotesk', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-serif:
+    'Integer Pixel Serif', 'Instrument Serif', ui-serif, Georgia, serif;
   /* The Figma frame is 1512 wide with 160px gutters. Every pixel-exact value
      from the design is gated on this, NOT on `xl` (1280) — below 1512 those
      values do not fit and the gutters collapse. */
