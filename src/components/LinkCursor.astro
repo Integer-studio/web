@@ -1,0 +1,121 @@
+---
+/**
+ * The floating label that follows the pointer over a linked project card and
+ * names where a click goes ("otevřít jetagents.ai"). Same look and motion as
+ * the "kopírovat" label on the contact e-mail (`sections/Cta.astro`).
+ *
+ * Cards opt in with `data-link-card="<domain>"`. One label serves them all.
+ * Only devices with a real hovering pointer get it; touch and keyboard users
+ * have the link itself, and GSAP is imported only on those devices.
+ *
+ * Decorative: the link's own text carries the destination for screen readers.
+ */
+---
+
+<div
+  id="link-cursor"
+  aria-hidden="true"
+  class="pointer-events-none fixed top-0 left-0 z-50 border border-rule bg-ink px-4 py-2 font-medium whitespace-nowrap text-paper opacity-0"
+>
+</div>
+
+<script>
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    import('gsap').then(({ gsap }) => {
+      const badge = document.querySelector<HTMLElement>('#link-cursor');
+      const cards = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-link-card]')
+      );
+      if (!badge || cards.length === 0) return;
+
+      gsap.set(badge, { opacity: 0, scale: 0.8 });
+      const xTo = gsap.quickTo(badge, 'x', {
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+      const yTo = gsap.quickTo(badge, 'y', {
+        duration: 0.3,
+        ease: 'power2.out',
+      });
+
+      const pointer = { x: -1, y: -1 };
+      let active: HTMLElement | null = null;
+      let fade: gsap.core.Animation | undefined;
+
+      /* Which card is under the pointer is decided from geometry, as in the
+         e-mail label: enter/leave events are unreliable during a scroll. */
+      const cardAtPointer = () =>
+        cards.find((card) => {
+          const r = card.getBoundingClientRect();
+          return (
+            pointer.x >= r.left &&
+            pointer.x <= r.right &&
+            pointer.y >= r.top &&
+            pointer.y <= r.bottom
+          );
+        }) ?? null;
+
+      const show = (card: HTMLElement) => {
+        badge.textContent = `otevřít ${card.dataset.linkCard}`;
+        if (active) {
+          active = card;
+          return;
+        }
+        active = card;
+        fade?.kill();
+        gsap.set(badge, { x: pointer.x, y: pointer.y });
+        fade = gsap.to(badge, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.3,
+          ease: 'back.out(1.7)',
+        });
+      };
+
+      const hide = () => {
+        if (!active) return;
+        active = null;
+        fade?.kill();
+        fade = gsap.to(badge, {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.2,
+          ease: 'power2.in',
+        });
+      };
+
+      const update = () => {
+        const card = cardAtPointer();
+        if (card) show(card);
+        else hide();
+      };
+
+      const onMove = (e: MouseEvent) => {
+        pointer.x = e.clientX;
+        pointer.y = e.clientY;
+        xTo(e.clientX);
+        yTo(e.clientY);
+        update();
+      };
+
+      for (const card of cards) {
+        card.addEventListener('mousemove', onMove);
+        card.addEventListener('mouseleave', hide);
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('scrollend', update);
+      window.addEventListener('resize', update);
+
+      /* View-transition safety. */
+      document.addEventListener('astro:before-swap', () => {
+        for (const card of cards) {
+          card.removeEventListener('mousemove', onMove);
+          card.removeEventListener('mouseleave', hide);
+        }
+        window.removeEventListener('scroll', update);
+        window.removeEventListener('scrollend', update);
+        window.removeEventListener('resize', update);
+      });
+    });
+  }
+</script>

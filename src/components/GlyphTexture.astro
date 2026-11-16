@@ -23,6 +23,8 @@ interface Props {
   /** Share of cells that carry a glyph. Sets the block size. */
   density?: number;
   seed?: number;
+  /** `light` for the paper sections, `dark` for a texture on ink. */
+  tone?: 'light' | 'dark';
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   cols = 320,
   density = 0.25,
   seed = 0x5eed,
+  tone = 'light',
 } = Astro.props;
 
 /* The characters actually used in the Figma layer. */
@@ -75,5 +78,10 @@ const field = grid.map((row) => row.join('').replace(/\s+$/, '')).join('\n');
   ]}
 >
   <pre
-    class="absolute top-1/2 left-1/2 m-0 -translate-x-1/2 -translate-y-1/2 font-mono text-[12px] leading-[22px] whitespace-pre text-card-ink opacity-[0.14]">{field}</pre>
+    class:list={[
+      'absolute top-1/2 left-1/2 m-0 -translate-x-1/2 -translate-y-1/2 font-mono text-[12px] leading-[22px] whitespace-pre',
+      tone === 'light'
+        ? 'text-card-ink opacity-[0.14]'
+        : 'text-rule opacity-30',
+    ]}>{field}</pre>
 </div>

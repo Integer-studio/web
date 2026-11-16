@@ -6,7 +6,7 @@ description: Webový systém pro řízení obchodních poptávek a tendrů, prim
 tags: [webová aplikace, vue.js, c# dotnet]
 year: 2025–současnost
 priority: 30
-featured: true
+featured: false
 ---
 
 RUBY pm měli na správu výběrek zastaralou a pomalou aplikaci. Přepsali jsme ji do nové

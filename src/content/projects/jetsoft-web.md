@@ -6,4 +6,7 @@ tags: [webová stránka, Next.js]
 year: '2026'
 priority: 10
 featured: false
+links:
+  - name: jetsoft.cz
+    url: https://jetsoft.cz/
 ---

@@ -6,4 +6,7 @@ tags: [webová aplikace, webová stránka, vue.js]
 year: 2025–současnost
 priority: 20
 featured: false
+links:
+  - name: mhdrun.intstudio.cz
+    url: https://mhdrun.intstudio.cz/
 ---

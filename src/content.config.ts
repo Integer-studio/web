@@ -13,6 +13,9 @@ const projects = defineCollection({
       /* Used as the body of the small cards. */
       description: z.string(),
       image: image(),
+      /* `logo` sets the image (an SVG lockup) centred on a brand panel
+         instead of filling the slot like a screenshot. Featured card only. */
+      imageStyle: z.enum(['screenshot', 'logo']).default('screenshot'),
       priority: z.number(),
       featured: z.boolean().optional(),
       links: z

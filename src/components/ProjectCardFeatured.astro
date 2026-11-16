@@ -3,16 +3,18 @@ import { Image } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
 
 /**
- * Figma `530:19` — 1064 × 518 at the frame width.
+ * Figma `530:19`, the dark featured card.
  *
- * The split is expressed as grid fractions rather than absolute offsets, so it
- * holds at every width between `md` and the frame instead of only landing at
- * 1512: inside the card's 30px padding the copy takes 383 and the screenshot
- * 621, which is exactly the Figma geometry once the card is 1064 wide.
+ * Padding is one value on all four sides and the gap between the copy and the
+ * image is the same value, so the image sits in an even frame. The split keeps
+ * the Figma 383 : 621 ratio. Height follows the image's 621:458 box, not a
+ * fixed 518px, so the card never leaves an empty band under shorter copy.
  *
- * The 30px title / 50px body indent is a deliberate 20px hanging indent; it is
- * kept from `md` up and collapses to a uniform 24px below that. The long copy
- * comes from the entry's markdown body.
+ * The copy is flush with the title. The Figma 20px hanging indent read as
+ * stray padding once the copy ran longer than the title.
+ *
+ * With a link, the whole card is the hit area (stretched link on the title),
+ * and `LinkCursor` shows where it goes.
  */
 interface Props {
   entry: CollectionEntry<'projects'>;
@@ -20,40 +22,70 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const link = entry.data.links?.[0];
 ---
 
 <article
-  class="rounded-xl bg-ink-raised p-6 md:p-[30px] lg:grid lg:grid-cols-[383fr_621fr] frame:h-[518px]"
+  class="relative rounded-xl bg-ink-raised p-6 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-ink md:p-8 lg:grid lg:grid-cols-[383fr_621fr] lg:gap-8"
+  data-link-card={link ? link.name : undefined}
 >
   <div class="min-w-0">
     <h3
       class="font-serif text-[clamp(1.75rem,4vw,3rem)] leading-tight tracking-[0.03em] text-paper"
     >
-      {entry.data.name}
+      {
+        link ? (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener"
+            class="outline-none after:absolute after:inset-0 after:rounded-xl"
+          >
+            {entry.data.name}
+            <span class="sr-only">(otevře {link.name} v novém okně)</span>
+          </a>
+        ) : (
+          entry.data.name
+        )
+      }
     </h3>
 
     {
       entry.data.subtitle && (
-        <p class="mt-4 text-base leading-[1.35] tracking-[0.01em] text-on-dark-91 md:mt-6 md:pl-5 lg:pr-6">
+        <p class="mt-4 text-base leading-[1.35] tracking-[0.01em] text-on-dark-91 md:mt-5">
           {entry.data.subtitle}
         </p>
       )
     }
 
     <div
-      class="prose-featured mt-4 text-[15px] leading-[1.4] font-light tracking-[0.02em] text-on-dark-65 md:mt-5 md:pl-5 lg:pr-6"
+      class="prose-featured mt-4 text-[15px] leading-[1.45] font-light tracking-[0.02em] text-on-dark-65 md:mt-5"
     >
       <Content />
     </div>
   </div>
 
-  <Image
-    src={entry.data.image}
-    alt={`Ukázka aplikace ${entry.data.name}`}
-    widths={[621, 1242]}
-    sizes="(min-width: 1512px) 621px, (min-width: 1024px) 60vw, 90vw"
-    class="mt-6 aspect-[621/458] w-full rounded-lg object-cover object-left-top md:mt-8 lg:mt-0 lg:h-full"
-  />
+  {
+    entry.data.imageStyle === 'logo' ? (
+      <div class="mt-6 flex aspect-[16/9] w-full items-center justify-center rounded-lg bg-white md:mt-8 lg:mt-0 lg:aspect-[621/458]">
+        <img
+          src={entry.data.image.src}
+          width={entry.data.image.width}
+          height={entry.data.image.height}
+          alt={entry.data.name}
+          class="h-auto w-[58%] max-w-[360px]"
+        />
+      </div>
+    ) : (
+      <Image
+        src={entry.data.image}
+        alt={`Ukázka aplikace ${entry.data.name}`}
+        widths={[621, 1242]}
+        sizes="(min-width: 1512px) 621px, (min-width: 1024px) 60vw, 90vw"
+        class="mt-6 aspect-[621/458] w-full rounded-lg object-cover object-left-top md:mt-8 lg:mt-0"
+      />
+    )
+  }
 </article>
 
 <style>

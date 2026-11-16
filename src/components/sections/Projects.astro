@@ -4,6 +4,7 @@ import GridFrame from '../GridFrame.astro';
 import GlyphTexture from '../GlyphTexture.astro';
 import ProjectCardFeatured from '../ProjectCardFeatured.astro';
 import ProjectCardSmall from '../ProjectCardSmall.astro';
+import LinkCursor from '../LinkCursor.astro';
 
 /** Figma `530:3` / `530:4` / `530:19` / `530:24` / `530:26`. Light section. */
 const projects = await getCollection('projects');
@@ -11,8 +12,7 @@ const projects = await getCollection('projects');
 const featured = projects.find((p) => p.data.featured);
 const rest = projects
   .filter((p) => p !== featured)
-  .sort((a, b) => b.data.priority - a.data.priority)
-  .slice(0, 2);
+  .sort((a, b) => b.data.priority - a.data.priority);
 ---
 
 <section
@@ -41,4 +41,6 @@ const rest = projects
       }
     </div>
   </GridFrame>
+
+  <LinkCursor />
 </section>
